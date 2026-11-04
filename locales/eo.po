@@ -1,0 +1,398 @@
+# Esperanto translation for Open-TmuxTabs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: open-tmux-tabs 2.0.0\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "+ New host"
+msgstr "+ Nova gastiganto"
+
+msgid ">> Open"
+msgstr ">> Malfermi"
+
+msgid "SSH target (user@host or alias):"
+msgstr "SSH-celo (uzanto@gastiganto aŭ kromnomo):"
+
+msgid "root@server or ssh-alias"
+msgstr "root@servilo aŭ ssh-kromnomo"
+
+msgid "Add host"
+msgstr "Aldoni gastiganton"
+
+msgid "Running sessions:"
+msgstr "Aktivaj seancoj:"
+
+msgid "Toggle: [t]   All: [a]   Invert: [i]"
+msgstr "Baskuli: [t]   Ĉiuj: [a]   Inversigi: [i]"
+
+msgid "New sessions (one name per line):"
+msgstr "Novaj seancoj (unu nomo po linio):"
+
+msgid "Reload"
+msgstr "Reŝargi"
+
+msgid "Toggle"
+msgstr "Baskuli"
+
+msgid "Toggle All"
+msgstr "Baskuli ĉiujn"
+
+msgid "Invert"
+msgstr "Inversigi"
+
+msgid "Jump start"
+msgstr "Rapida ekigo"
+
+msgid "Invalid name: '{name}'"
+msgstr "Nevalida nomo: '{name}'"
+
+msgid "A session named '{name}' already exists."
+msgstr "Seanco nomata '{name}' jam ekzistas."
+
+msgid "Status: connection failed"
+msgstr "Stato: konekto malsukcesis"
+
+msgid "Reconnect"
+msgstr "Rekonekti"
+
+msgid "Set up host"
+msgstr "Agordi gastiganton"
+
+msgid "Delete"
+msgstr "Forigi"
+
+msgid "Open all detected sessions"
+msgstr "Malfermi ĉiujn trovitajn seancojn"
+
+msgid "Selection summary:"
+msgstr "Resumo de elekto:"
+
+msgid "(no selection)"
+msgstr "(neniu elekto)"
+
+msgid "Total: {total} session(s) on {hosts} host(s)"
+msgstr "Entute: {total} seanco(j) sur {hosts} gastiganto(j)"
+
+msgid "(existing)"
+msgstr "(ekzistanta)"
+
+msgid "(new)"
+msgstr "(nova)"
+
+msgid "One WT – Open selection"
+msgstr "Unu WT – Malfermi elekton"
+
+msgid "Per host – Open selection"
+msgstr "Po gastiganto – Malfermi elekton"
+
+msgid "Delete host '{name}'?"
+msgstr "Ĉu forigi gastiganton '{name}'?"
+
+msgid "Yes"
+msgstr "Jes"
+
+msgid "No"
+msgstr "Ne"
+
+msgid "OK"
+msgstr "Bone"
+
+msgid "Error on {name}"
+msgstr "Eraro ĉe {name}"
+
+msgid "Waiting for pending connections..."
+msgstr "Atendante pendantajn konektojn..."
+
+msgid "Quit"
+msgstr "Forlasi"
+
+msgid "Delete host"
+msgstr "Forigi gastiganton"
+
+msgid "New host"
+msgstr "Nova gastiganto"
+
+msgid "Open"
+msgstr "Malfermi"
+
+msgid "Open all"
+msgstr "Malfermi ĉiujn"
+
+msgid "Language"
+msgstr "Lingvo"
+
+msgid "Select language:"
+msgstr "Elekti lingvon:"
+
+msgid "Cancel"
+msgstr "Nuligi"
+
+msgid "Language changed to {name}. Restart now?"
+msgstr "Lingvo ŝanĝita al {name}. Ĉu rekomenci nun?"
+
+msgid "SSH connection timed out"
+msgstr "SSH-konekto eltempiĝis"
+
+msgid "ssh executable not found"
+msgstr "ssh-programo ne trovita"
+
+msgid "SSH error: {error}"
+msgstr "SSH-eraro: {error}"
+
+msgid "SSH connection failed"
+msgstr "SSH-konekto malsukcesis"
+
+msgid "Setup: {host}"
+msgstr "Agordo: {host}"
+
+msgid "No SSH key found in %USERPROFILE%\\.ssh\\."
+msgstr "Neniu SSH-ŝlosilo trovita en %USERPROFILE%\\.ssh\\."
+
+msgid "Create one first with: ssh-keygen -t ed25519"
+msgstr "Kreu unu unue per: ssh-keygen -t ed25519"
+
+msgid "Press Enter to close"
+msgstr "Premu Enigklavon por fermi"
+
+msgid "Deploying {key} to {host}..."
+msgstr "Sendante {key} al {host}..."
+
+msgid "Key deployed."
+msgstr "Ŝlosilo sendita."
+
+# ============================================================
+# Direct Session / Show All (new features)
+# ============================================================
+
+msgid "Direct session"
+msgstr "Rekta seanco"
+
+msgid "Show all"
+msgstr "Superrigardo"
+
+msgid "Host"
+msgstr "Gastiganto"
+
+msgid "Session"
+msgstr "Seanco"
+
+msgid "Waiting for connections..."
+msgstr "Atendante konektojn..."
+
+msgid "One WT – Execute"
+msgstr "Unu WT – Plenumi"
+
+msgid "Per host – Execute"
+msgstr "Po gastiganto – Plenumi"
+
+msgid "Target hosts:"
+msgstr "Celaj gastigantoj:"
+
+msgid "Session names (one per line):"
+msgstr "Seancaj nomoj (unu po linio):"
+
+msgid "Execute"
+msgstr "Plenumi"
+
+# ============================================================
+# Native Windows GUI (tmux-helper-rs): settings, tray, help overlay
+# ============================================================
+
+msgid "About"
+msgstr "Pri"
+
+msgid "Adds the typed SSH target to the list and connects to it in the background."
+msgstr "Aldonas la tajpitan SSH-celon al la listo kaj konektiĝas al ĝi fone."
+
+msgid "Automatic (system language)"
+msgstr "Aŭtomata (sistema lingvo)"
+
+msgid "Background color:"
+msgstr "Fonkoloro:"
+
+msgid "Change"
+msgstr "Ŝanĝi"
+
+msgid "Connecting…"
+msgstr "Konektante…"
+
+msgid "Creates the missing sessions on the selected hosts and opens all of them in one Windows Terminal window. Selection and names stay, so you can run it again."
+msgstr "Kreas la mankantajn seancojn ĉe la elektitaj gastigantoj kaj malfermas ĉiujn en unu fenestro de Windows Terminal. Elekto kaj nomoj restas, do vi povas plenumi denove."
+
+msgid "Creates the sessions typed in the field below on this host and opens them at once in one Windows Terminal window. Existing sessions with the same name are attached."
+msgstr "Kreas ĉe ĉi tiu gastiganto la seancojn tajpitajn en la suba kampo kaj tuj malfermas ilin en unu fenestro de Windows Terminal. Ekzistantaj samnomaj seancoj estas alligitaj."
+
+msgid "Ctrl"
+msgstr "Ctrl"
+
+msgid "Del"
+msgstr "Del"
+
+msgid "Direct start"
+msgstr "Rekte starti"
+
+msgid "Enter"
+msgstr "Enigo"
+
+msgid "Error"
+msgstr "Eraro"
+
+msgid "Fetches the session list from the host again."
+msgstr "Denove prenas la seancoliston de la gastiganto."
+
+msgid "Filter"
+msgstr "Filtrilo"
+
+msgid "Filter…  (Ctrl+F)"
+msgstr "Filtri…  (Ctrl+F)"
+
+msgid "Help"
+msgstr "Helpo"
+
+msgid "Hide host '{name}'? It stays in your SSH config file; add it again with \"New host\"."
+msgstr "Kaŝi gastiganton '{name}'? Ĝi restas en via SSH-agordo; aldonu ĝin denove per „Nova gastiganto“."
+
+msgid "Hotkey"
+msgstr "Fulmoklavo"
+
+msgid "Inverts the selection of the visible entries."
+msgstr "Inversigas la elekton de la videblaj eroj."
+
+msgid "Jumps to Direct session: type session names once and start them on several hosts at the same time."
+msgstr "Saltas al Rekta seanco: tajpu seancnomojn unufoje kaj startigu ilin ĉe pluraj gastigantoj samtempe."
+
+msgid "Jumps to Show all: one sortable table with the sessions of all reachable hosts."
+msgstr "Saltas al Superrigardo: unu ordigebla tabelo kun la seancoj de ĉiuj atingeblaj gastigantoj."
+
+msgid "Jumps to \"New host\" and puts the cursor in the input field. Enter an SSH target such as user@server or an alias from your SSH config."
+msgstr "Saltas al „Nova gastiganto“ kaj metas la kursoron en la enigkampon. Tajpu SSH-celon, ekzemple user@servilo aŭ kaŝnomon el via SSH-agordo."
+
+msgid "Jumps to the Open view: summary of your selection and the quick start button."
+msgstr "Saltas al la vido Malfermi: resumo de via elekto kaj la rapidstarta butono."
+
+msgid "Key:"
+msgstr "Klavo:"
+
+msgid "Language:"
+msgstr "Lingvo:"
+
+msgid "Like Execute, but with one Windows Terminal window per host."
+msgstr "Kiel Plenumi, sed kun unu fenestro de Windows Terminal po gastiganto."
+
+msgid "Like One WT, but with one Windows Terminal window per host."
+msgstr "Kiel Unu WT, sed kun unu fenestro de Windows Terminal po gastiganto."
+
+msgid "Moves the cursor into the search field above the current list. The list shows only entries that contain the text (upper and lower case do not matter). Esc or Arrow down returns to the list."
+msgstr "Metas la kursoron en la serĉkampon super la nuna listo. La listo montras nur erojn, kiuj enhavas la tekston (usklecon ne gravas). Esk aŭ Sago malsupren revenas al la listo."
+
+msgid "One WT"
+msgstr "Unu WT"
+
+msgid "Opens all running sessions on all reachable hosts right away, one Windows Terminal window per host. Waits for hosts that are still connecting."
+msgstr "Tuj malfermas ĉiujn aktivajn seancojn ĉe ĉiuj atingeblaj gastigantoj, unu fenestro de Windows Terminal po gastiganto. Atendas gastigantojn, kiuj ankoraŭ konektiĝas."
+
+msgid "Opens all selected sessions in a single Windows Terminal window. The selection stays."
+msgstr "Malfermas ĉiujn elektitajn seancojn en unu sola fenestro de Windows Terminal. La elekto restas."
+
+msgid "Opens all selected sessions, and creates the new ones, in a single Windows Terminal window. Afterwards the selection is cleared."
+msgstr "Malfermas ĉiujn elektitajn seancojn, kaj kreas la novajn, en unu sola fenestro de Windows Terminal. Poste la elekto estas malplenigita."
+
+msgid "Opens an interactive Windows Terminal window that copies your public SSH key to the host. You type the password once; afterwards the host connects without a password."
+msgstr "Malfermas interagan fenestron de Windows Terminal, kiu kopias vian publikan SSH-ŝlosilon al la gastiganto. Vi tajpas la pasvorton unufoje; poste la gastiganto konektiĝas sen pasvorto."
+
+msgid "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is."
+msgstr "Tuj malfermas la markitan seancon en langeto de Windows Terminal. La elekto restas senŝanĝa."
+
+msgid "Opens the selected sessions with one Windows Terminal window per host. The selection stays."
+msgstr "Malfermas la elektitajn seancojn kun unu fenestro de Windows Terminal po gastiganto. La elekto restas."
+
+msgid "Opens the settings: language, hotkey, background color and start with Windows."
+msgstr "Malfermas la agordojn: lingvo, fulmoklavo, fonkoloro kaj starti kun Windows."
+
+msgid "Per host"
+msgstr "Po gastiganto"
+
+msgid "Please select a key."
+msgstr "Bonvolu elekti klavon."
+
+msgid "Please select at least one modifier (Ctrl, Alt, Shift or Win)."
+msgstr "Bonvolu elekti almenaŭ unu modifklavon (Ctrl, Alt, Shift aŭ Win)."
+
+msgid "Press {hotkey} to show or hide the window."
+msgstr "{hotkey} montras aŭ kaŝas la fenestron."
+
+msgid "Quits Open-TmuxTabs. The sessions on the hosts keep running. Closing the window or pressing Esc only hides it in the notification area."
+msgstr "Fermas Open-TmuxTabs. La seancoj ĉe la gastigantoj daŭras. Fermi la fenestron aŭ premi Esk nur kaŝas ĝin en la sciiga areo."
+
+msgid "Reads your SSH config file again and reconnects to all hosts."
+msgstr "Relegas vian SSH-agordodosieron kaj rekonektas ĉiujn gastigantojn."
+
+msgid "Reload hosts"
+msgstr "Reŝargi gastigantojn"
+
+msgid "Removes the selected host after a confirmation. A host from your SSH config is only hidden in the app; the config file is not changed."
+msgstr "Forigas la elektitan gastiganton post konfirmo. Gastiganto el via SSH-agordo estas nur kaŝita en la aplikaĵo; la dosiero ne ŝanĝiĝas."
+
+msgid "Selects all visible entries, or deselects them if all are selected already. Entries hidden by the filter stay as they are."
+msgstr "Elektas ĉiujn videblajn erojn, aŭ malelektas ilin, se ĉiuj jam estas elektitaj. Eroj kaŝitaj de la filtrilo restas kiel ili estas."
+
+msgid "Selects or deselects the highlighted entry."
+msgstr "Elektas aŭ malelektas la markitan eron."
+
+msgid "Settings"
+msgstr "Agordoj"
+
+msgid "Settings file"
+msgstr "Agordodosiero"
+
+msgid "Shift"
+msgstr "Shift"
+
+msgid "Shows the explanations of all shortcuts of the current view."
+msgstr "Montras la klarigojn de ĉiuj fulmoklavoj de la nuna vido."
+
+msgid "Sort by host"
+msgstr "Ordigi laŭ gastiganto"
+
+msgid "Sort by session"
+msgstr "Ordigi laŭ seanco"
+
+msgid "Sorts the table by host. Press again to reverse the order."
+msgstr "Ordigas la tabelon laŭ gastiganto. Premu denove por inversigi la ordon."
+
+msgid "Sorts the table by session name. Press again to reverse the order."
+msgstr "Ordigas la tabelon laŭ seancnomo. Premu denove por inversigi la ordon."
+
+msgid "Space"
+msgstr "Spaco"
+
+msgid "Start with Windows"
+msgstr "Starti kun Windows"
+
+msgid "The hotkey {hotkey} is already in use.\n\nPlease choose a different one in the settings."
+msgstr "La fulmoklavo {hotkey} jam estas uzata.\n\nBonvolu elekti alian en la agordoj."
+
+msgid "The hotkey {hotkey} is already used by Windows or another program.\n\nPlease choose a different one."
+msgstr "La fulmoklavo {hotkey} jam estas uzata de Windows aŭ alia programo.\n\nBonvolu elekti alian."
+
+msgid "The settings could not be saved."
+msgstr "La agordoj ne povis esti konservitaj."
+
+msgid "Tries to connect to the host again."
+msgstr "Provas denove konektiĝi al la gastiganto."
+
+msgid "Windows Terminal (wt.exe) could not be started."
+msgstr "Windows Terminal (wt.exe) ne povis esti startigita."
+
+msgid "hotkey not active"
+msgstr "fulmoklavo ne aktiva"
+
+msgid "tmux sessions on remote Linux hosts as Windows Terminal tabs."
+msgstr "tmux-seancoj ĉe foraj Linux-gastigantoj kiel langetoj de Windows Terminal."
+
+msgid "{app} is running"
+msgstr "{app} funkcias"

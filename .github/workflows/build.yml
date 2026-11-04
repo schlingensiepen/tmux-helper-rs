@@ -1,0 +1,98 @@
+# Open-TmuxTabs (Rust) - build & release
+#
+# - Every push/PR: tests and lint on Linux (core logic) and a native Windows
+#   build (MSVC, static CRT); the EXE is uploaded as an artifact.
+# - Push to main: if no release v<version from Cargo.toml> exists yet, create
+#   it as a DRAFT with OpenTmuxTabs.exe + .sha256 (notes from CHANGELOG.md).
+#   An existing draft gets the new build. Publishing is a manual step.
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Toolchain
+        run: |
+          rustup update stable --no-self-update
+          rustup default stable
+          rustup component add clippy
+      - name: Test
+        run: cargo test --locked
+      - name: Lint
+        run: cargo clippy --locked --all-targets -- -D warnings
+
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Toolchain
+        run: |
+          rustup update stable --no-self-update
+          rustup default stable
+          rustup component add clippy
+
+      - name: Test
+        run: cargo test --locked
+
+      - name: Lint
+        run: cargo clippy --release --locked -- -D warnings
+
+      - name: Build
+        run: |
+          cargo build --release --locked
+          mkdir -p dist
+          cp target/release/OpenTmuxTabs.exe dist/
+          (cd dist && sha256sum OpenTmuxTabs.exe | cut -d' ' -f1 > OpenTmuxTabs.exe.sha256)
+          ls -l dist; cat dist/OpenTmuxTabs.exe.sha256
+
+      - name: Check (no VC++ runtime DLLs imported)
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          $dumpbin = Get-ChildItem "$vs\VC\Tools\MSVC" -Recurse -Filter dumpbin.exe | Where-Object FullName -match 'Hostx64\\x64' | Select-Object -First 1
+          $imports = & $dumpbin.FullName /dependents dist\OpenTmuxTabs.exe | Select-String '\.dll' | ForEach-Object { $_.Line.Trim() }
+          $imports
+          if ($imports -match 'vcruntime|msvcp|api-ms-win-crt') { throw "Unexpected runtime DLL dependency" }
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: OpenTmuxTabs
+          path: dist/
+
+      - name: Draft release (if this version is not published yet)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ver=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)
+          tag="v$ver"
+          state=$(gh release list --limit 100 --json tagName,isDraft --jq ".[] | select(.tagName==\"$tag\") | .isDraft")
+          if [ "$state" = "false" ]; then
+            echo "$tag is already published - no new release."
+            exit 0
+          fi
+          if [ "$state" = "true" ]; then
+            echo "Updating the assets of draft $tag."
+            gh release upload "$tag" dist/OpenTmuxTabs.exe dist/OpenTmuxTabs.exe.sha256 --clobber
+            exit 0
+          fi
+          awk -v h="## [$ver]" 'index($0,h)==1{f=1;next} /^## /{f=0} f' CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "Open-TmuxTabs $ver" > notes.md
+          gh release create "$tag" dist/OpenTmuxTabs.exe dist/OpenTmuxTabs.exe.sha256 \
+            --draft --target "$GITHUB_SHA" --title "Open-TmuxTabs $ver" --notes-file notes.md

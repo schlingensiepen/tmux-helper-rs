@@ -1,0 +1,403 @@
+# Klingon translation for Open-TmuxTabs
+#
+# Note: Klingon (tlhIngan Hol) lacks native vocabulary for most
+# modern IT concepts. Loanwords are used where no natural term
+# exists (e.g. "SSH", "tmux", "WT", "session", "host"). Core
+# interface actions use proper Klingon verbs and idioms.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: open-tmux-tabs 2.0.0\n"
+"Language: tlh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "+ New host"
+msgstr "+ host chu'"
+
+msgid ">> Open"
+msgstr ">> poSmoH"
+
+msgid "SSH target (user@host or alias):"
+msgstr "SSH qach (lo'wI'@host pagh pong'a'):"
+
+msgid "root@server or ssh-alias"
+msgstr "root@server pagh ssh-pong'a'"
+
+msgid "Add host"
+msgstr "host chel"
+
+msgid "Running sessions:"
+msgstr "session taHtaH:"
+
+msgid "Toggle: [t]   All: [a]   Invert: [i]"
+msgstr "choH: [t]   Hoch: [a]   jI': [i]"
+
+msgid "New sessions (one name per line):"
+msgstr "session chu' (wa' pong DaqvaD wa' Dop):"
+
+msgid "Reload"
+msgstr "chegh"
+
+msgid "Toggle"
+msgstr "choH"
+
+msgid "Toggle All"
+msgstr "Hoch choH"
+
+msgid "Invert"
+msgstr "jI'"
+
+msgid "Jump start"
+msgstr "taghlaH"
+
+msgid "Invalid name: '{name}'"
+msgstr "pong Qagh: '{name}'"
+
+msgid "A session named '{name}' already exists."
+msgstr "session '{name}' tu'lu'choH."
+
+msgid "Status: connection failed"
+msgstr "Dotlh: rar Qap Qagh"
+
+msgid "Reconnect"
+msgstr "rar ghu'"
+
+msgid "Set up host"
+msgstr "host cher"
+
+msgid "Delete"
+msgstr "Qaw'"
+
+msgid "Open all detected sessions"
+msgstr "Hoch session tu'lu'bogh poSmoH"
+
+msgid "Selection summary:"
+msgstr "wIv qummoH:"
+
+msgid "(no selection)"
+msgstr "(wIv pagh)"
+
+msgid "Total: {total} session(s) on {hosts} host(s)"
+msgstr "Hoch: {total} session {hosts} host Daq"
+
+msgid "(existing)"
+msgstr "(taH)"
+
+msgid "(new)"
+msgstr "(chu')"
+
+msgid "One WT – Open selection"
+msgstr "wa' WT – wIv poSmoH"
+
+msgid "Per host – Open selection"
+msgstr "host Hoch – wIv poSmoH"
+
+msgid "Delete host '{name}'?"
+msgstr "host '{name}' Qaw'?"
+
+msgid "Yes"
+msgstr "HIja'"
+
+msgid "No"
+msgstr "ghobe'"
+
+msgid "OK"
+msgstr "maj"
+
+msgid "Error on {name}"
+msgstr "Qagh: {name}"
+
+msgid "Waiting for pending connections..."
+msgstr "rar loS..."
+
+msgid "Quit"
+msgstr "mev"
+
+msgid "Delete host"
+msgstr "host Qaw'"
+
+msgid "New host"
+msgstr "host chu'"
+
+msgid "Open"
+msgstr "poSmoH"
+
+msgid "Open all"
+msgstr "Hoch poSmoH"
+
+msgid "Language"
+msgstr "Hol"
+
+msgid "Select language:"
+msgstr "Hol wIv:"
+
+msgid "Cancel"
+msgstr "Qaw'Ha'"
+
+msgid "Language changed to {name}. Restart now?"
+msgstr "{name} Hol choHta'. DaH tagh ghu'?"
+
+msgid "SSH connection timed out"
+msgstr "SSH rar poH rIn"
+
+msgid "ssh executable not found"
+msgstr "ssh ghunmeH Qu' tu'be'lu'"
+
+msgid "SSH error: {error}"
+msgstr "SSH Qagh: {error}"
+
+msgid "SSH connection failed"
+msgstr "SSH rar Qap Qagh"
+
+msgid "Setup: {host}"
+msgstr "cher: {host}"
+
+msgid "No SSH key found in %USERPROFILE%\\.ssh\\."
+msgstr "%USERPROFILE%\\.ssh\\ Daq SSH ngaSwI' tu'be'lu'."
+
+msgid "Create one first with: ssh-keygen -t ed25519"
+msgstr "wa' chenmoH wa'DIch: ssh-keygen -t ed25519"
+
+msgid "Press Enter to close"
+msgstr "SoQmeH Enter yIqIp"
+
+msgid "Deploying {key} to {host}..."
+msgstr "{key} {host} Daq ngeH..."
+
+msgid "Key deployed."
+msgstr "ngaSwI' ngeHta'."
+
+# ============================================================
+# Direct Session / Show All (new features)
+# ============================================================
+
+msgid "Direct session"
+msgstr "session Doq"
+
+msgid "Show all"
+msgstr "Hoch cha'"
+
+msgid "Host"
+msgstr "host"
+
+msgid "Session"
+msgstr "session"
+
+msgid "Waiting for connections..."
+msgstr "rar loS..."
+
+msgid "One WT – Execute"
+msgstr "wa' WT – ta'"
+
+msgid "Per host – Execute"
+msgstr "host Hoch – ta'"
+
+msgid "Target hosts:"
+msgstr "host qach:"
+
+msgid "Session names (one per line):"
+msgstr "session pong (wa' Dop wa'):"
+
+msgid "Execute"
+msgstr "ta'"
+
+# ============================================================
+# Native Windows GUI (tmux-helper-rs): settings, tray, help overlay
+# ============================================================
+
+msgid "About"
+msgstr "De'"
+
+msgid "Adds the typed SSH target to the list and connects to it in the background."
+msgstr "SSH Doq Daghitlhbogh tetlh chel 'ej Hegh nIteb rarmoH."
+
+msgid "Automatic (system language)"
+msgstr "jIrmoH (pat Hol)"
+
+msgid "Background color:"
+msgstr "Hutlh rItlh:"
+
+msgid "Change"
+msgstr "choH"
+
+msgid "Connecting…"
+msgstr "rarlI'…"
+
+msgid "Creates the missing sessions on the selected hosts and opens all of them in one Windows Terminal window. Selection and names stay, so you can run it again."
+msgstr "host wIvlu'bogh Daq session Hutlhbogh chenmoH 'ej Hoch poSmoH wa' Windows Terminal Qorwagh'a'. wIv 'ej pong ratlh; vaj nIteb ta'laH."
+
+msgid "Creates the sessions typed in the field below on this host and opens them at once in one Windows Terminal window. Existing sessions with the same name are attached."
+msgstr "naDev host Daq session ghItlhlu'bogh chenmoH 'ej SIbI' poSmoH wa' Windows Terminal Qorwagh'a'. session tu'lu'bogh rap pong rar."
+
+msgid "Ctrl"
+msgstr "Ctrl"
+
+msgid "Del"
+msgstr "Del"
+
+msgid "Direct start"
+msgstr "Doq taghmoH"
+
+msgid "Enter"
+msgstr "Enter"
+
+msgid "Error"
+msgstr "Qagh"
+
+msgid "Fetches the session list from the host again."
+msgstr "host vo' session tetlh Suq nIteb."
+
+msgid "Filter"
+msgstr "Saq"
+
+msgid "Filter…  (Ctrl+F)"
+msgstr "Saq…  (Ctrl+F)"
+
+msgid "Help"
+msgstr "QaH"
+
+msgid "Hide host '{name}'? It stays in your SSH config file; add it again with \"New host\"."
+msgstr "host '{name}' So'? SSH config De'wI' ratlh; \"host chu'\" lo'taHvIS chel nIteb."
+
+msgid "Hotkey"
+msgstr "hotkey"
+
+msgid "Inverts the selection of the visible entries."
+msgstr "tetlh leghlu'bogh wIv lammoH."
+
+msgid "Jumps to Direct session: type session names once and start them on several hosts at the same time."
+msgstr "session Doq Daq jaH: session pong wa'logh ghItlh 'ej host law' Daq rap poH taghmoH."
+
+msgid "Jumps to Show all: one sortable table with the sessions of all reachable hosts."
+msgstr "Hoch cha' Daq jaH: Hoch host Suchlu'laHbogh session tetlh wa'."
+
+msgid "Jumps to \"New host\" and puts the cursor in the input field. Enter an SSH target such as user@server or an alias from your SSH config."
+msgstr "\"host chu'\" Daq jaH 'ej ghItlh Daq Da'. SSH Doq ghItlh, user@server rur pagh SSH config pong."
+
+msgid "Jumps to the Open view: summary of your selection and the quick start button."
+msgstr "poSmoH legh Daq jaH: wIv naQ 'ej taghlaH leQ."
+
+msgid "Key:"
+msgstr "leQ:"
+
+msgid "Language:"
+msgstr "Hol:"
+
+msgid "Like Execute, but with one Windows Terminal window per host."
+msgstr "ta' rur, 'ach wa' Windows Terminal Qorwagh'a' host Hoch."
+
+msgid "Like One WT, but with one Windows Terminal window per host."
+msgstr "wa' WT rur, 'ach wa' Windows Terminal Qorwagh'a' host Hoch."
+
+msgid "Moves the cursor into the search field above the current list. The list shows only entries that contain the text (upper and lower case do not matter). Esc or Arrow down returns to the list."
+msgstr "tetlh Dung Saq Daq Da'. tetlh ghItlh ngaSbogh neH cha' (Degh tIn mach Daqel). Esc pagh bIng ghIch tetlh Daq chegh."
+
+msgid "One WT"
+msgstr "wa' WT"
+
+msgid "Opens all running sessions on all reachable hosts right away, one Windows Terminal window per host. Waits for hosts that are still connecting."
+msgstr "Hoch host Suchlu'laHbogh Daq session taHtaHbogh Hoch SIbI' poSmoH, wa' Windows Terminal Qorwagh'a' host Hoch. host rarlI'bogh loS."
+
+msgid "Opens all selected sessions in a single Windows Terminal window. The selection stays."
+msgstr "session wIvlu'bogh Hoch poSmoH wa' Windows Terminal Qorwagh'a'. wIv ratlh."
+
+msgid "Opens all selected sessions, and creates the new ones, in a single Windows Terminal window. Afterwards the selection is cleared."
+msgstr "session wIvlu'bogh Hoch poSmoH 'ej chu' chenmoH, wa' Windows Terminal Qorwagh'a'. ghIq wIv teq."
+
+msgid "Opens an interactive Windows Terminal window that copies your public SSH key to the host. You type the password once; afterwards the host connects without a password."
+msgstr "Windows Terminal Qorwagh'a' poSmoH; SSH ngoQ De' host Daq lI'. mu'ghom pegh wa'logh DaghItlh; ghIq host rar mu'ghom pegh Hutlh."
+
+msgid "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is."
+msgstr "session wovmoHlu'bogh SIbI' poSmoH Windows Terminal Qorwagh Daq. wIv choHbe'."
+
+msgid "Opens the selected sessions with one Windows Terminal window per host. The selection stays."
+msgstr "session wIvlu'bogh poSmoH, wa' Windows Terminal Qorwagh'a' host Hoch. wIv ratlh."
+
+msgid "Opens the settings: language, hotkey, background color and start with Windows."
+msgstr "SeHlaw poSmoH: Hol, hotkey, Hutlh rItlh, Windows tagh."
+
+msgid "Per host"
+msgstr "host Hoch"
+
+msgid "Please select a key."
+msgstr "leQ yIwIv."
+
+msgid "Please select at least one modifier (Ctrl, Alt, Shift or Win)."
+msgstr "choHwI' wa' yIwIv (Ctrl, Alt, Shift pagh Win)."
+
+msgid "Press {hotkey} to show or hide the window."
+msgstr "{hotkey} Qorwagh cha' pagh So'."
+
+msgid "Quits Open-TmuxTabs. The sessions on the hosts keep running. Closing the window or pressing Esc only hides it in the notification area."
+msgstr "Open-TmuxTabs mevmoH. host Daq session taHtaH. Qorwagh SoQmoH pagh Esc neH So'."
+
+msgid "Reads your SSH config file again and reconnects to all hosts."
+msgstr "SSH config De'wI' laD nIteb 'ej Hoch host rarmoH nIteb."
+
+msgid "Reload hosts"
+msgstr "host chegh"
+
+msgid "Removes the selected host after a confirmation. A host from your SSH config is only hidden in the app; the config file is not changed."
+msgstr "host wIvlu'bogh teq Hevlu'DI'. SSH config host neH So'lu'; De'wI' choHbe'."
+
+msgid "Selects all visible entries, or deselects them if all are selected already. Entries hidden by the filter stay as they are."
+msgstr "Hoch leghlu'bogh wIv, pagh Hoch wIvlu'pu'chugh wIvbe'. Saq So'lu'bogh choHbe'."
+
+msgid "Selects or deselects the highlighted entry."
+msgstr "wovmoHlu'bogh wIv pagh wIvbe'."
+
+msgid "Settings"
+msgstr "SeHlaw"
+
+msgid "Settings file"
+msgstr "SeHlaw De'wI'"
+
+msgid "Shift"
+msgstr "Shift"
+
+msgid "Shows the explanations of all shortcuts of the current view."
+msgstr "legh DaH Hoch leQ QIjmeH mu' cha'."
+
+msgid "Sort by host"
+msgstr "host Hutlh"
+
+msgid "Sort by session"
+msgstr "session Hutlh"
+
+msgid "Sorts the table by host. Press again to reverse the order."
+msgstr "host Hutlh tetlh. nIteb Dachu'chugh mIw lam."
+
+msgid "Sorts the table by session name. Press again to reverse the order."
+msgstr "session pong Hutlh tetlh. nIteb Dachu'chugh mIw lam."
+
+msgid "Space"
+msgstr "Space"
+
+msgid "Start with Windows"
+msgstr "Windows tagh"
+
+msgid "The hotkey {hotkey} is already in use.\n\nPlease choose a different one in the settings."
+msgstr "hotkey {hotkey} lo'lu'taH.\n\nSeHlaw Daq latlh yIwIv."
+
+msgid "The hotkey {hotkey} is already used by Windows or another program.\n\nPlease choose a different one."
+msgstr "hotkey {hotkey} lo' Windows pagh latlh ghun.\n\nlatlh yIwIv."
+
+msgid "The settings could not be saved."
+msgstr "SeHlaw pollaHbe'."
+
+msgid "Tries to connect to the host again."
+msgstr "host rarmoH nIteb."
+
+msgid "Windows Terminal (wt.exe) could not be started."
+msgstr "Windows Terminal (wt.exe) taghlaHbe'."
+
+msgid "hotkey not active"
+msgstr "hotkey Qapbe'"
+
+msgid "tmux sessions on remote Linux hosts as Windows Terminal tabs."
+msgstr "Hop Linux host Daq tmux session, Windows Terminal Qorwagh rur."
+
+msgid "{app} is running"
+msgstr "{app} Qap"

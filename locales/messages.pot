@@ -1,0 +1,640 @@
+# Open-TmuxTabs translation template
+# Copyright (C) 2026
+# This file is distributed under the same license as the open-tmux-tabs package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: open-tmux-tabs 2.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-07 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# ============================================================
+# Host list (left panel)
+# ============================================================
+
+#. List entry at the top of the host list. Selecting it shows the
+#. "new host" form on the right.
+#: src/open_tmux_tabs/widgets/host_list.py
+msgid "+ New host"
+msgstr ""
+
+#. List entry at the bottom of the host list. Selecting it shows the
+#. "Open" view with summary and launch buttons.
+#: src/open_tmux_tabs/widgets/host_list.py
+msgid ">> Open"
+msgstr ""
+
+# ============================================================
+# New host form (right panel)
+# ============================================================
+
+#. Label above the input field where the user enters a new SSH target.
+#: src/open_tmux_tabs/widgets/new_host.py
+msgid "SSH target (user@host or alias):"
+msgstr ""
+
+#. Placeholder shown inside the empty input field for a new SSH target.
+#: src/open_tmux_tabs/widgets/new_host.py
+msgid "root@server or ssh-alias"
+msgstr ""
+
+#. Button below the input field. Clicking it adds the host to the list.
+#: src/open_tmux_tabs/widgets/new_host.py
+msgid "Add host"
+msgstr ""
+
+# ============================================================
+# Host detail view (connected host)
+# ============================================================
+
+#. Header above the session list of a connected host.
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Running sessions:"
+msgstr ""
+
+#. Hint line shown below the session list. Lists the keyboard shortcuts:
+#. t = toggle current, a = toggle all, i = invert selection.
+#. The letters in brackets are the actual key bindings -- they must
+#. stay constant across all languages, so do NOT translate them.
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Toggle: [t]   All: [a]   Invert: [i]"
+msgstr ""
+
+#. Label above the multi-line text area where the user enters new
+#. session names (one per line) to be created on the remote host.
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "New sessions (one name per line):"
+msgstr ""
+
+#. Button at the top right of the host detail. Triggers a fresh SSH
+#. call to refresh the session list.
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Reload"
+msgstr ""
+
+#. Footer binding description for the toggle action (key: t).
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Toggle"
+msgstr ""
+
+#. Footer binding description for the toggle-all action (key: a).
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Toggle All"
+msgstr ""
+
+#. Footer binding description for the invert-selection action (key: i).
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Invert"
+msgstr ""
+
+#. Footer binding description for the jump-start action (key: j).
+#. Launches the currently highlighted session in its own Windows
+#. Terminal tab immediately, without requiring any selection or
+#. navigation to the Open view.
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Jump start"
+msgstr ""
+
+#. Validation warning shown below the new-sessions text area when a
+#. session name does not match [a-zA-Z0-9_-]+.
+#. {name} is the invalid name -- keep the placeholder.
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Invalid name: '{name}'"
+msgstr ""
+
+#. Validation warning shown below the new-sessions text area when a
+#. session name matches an already-running session on the host.
+#. {name} is the duplicate name -- keep the placeholder.
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "A session named '{name}' already exists."
+msgstr ""
+
+# ============================================================
+# Host error view (failed connection)
+# ============================================================
+
+#. Status line shown when a host could not be reached.
+#. Displayed below the hostname.
+#: src/open_tmux_tabs/widgets/host_error.py
+msgid "Status: connection failed"
+msgstr ""
+
+#. Button on the failed-host view. Triggers a new connection attempt.
+#: src/open_tmux_tabs/widgets/host_error.py
+msgid "Reconnect"
+msgstr ""
+
+#. Button on the failed-host view. Opens an interactive Windows
+#. Terminal tab that deploys the user's SSH public key to the remote
+#. host (so password-less login becomes possible).
+#: src/open_tmux_tabs/widgets/host_error.py
+msgid "Set up host"
+msgstr ""
+
+#. Button to delete a host (used in host error view and host detail
+#. view). Triggers a confirmation dialog.
+#: src/open_tmux_tabs/widgets/host_error.py
+#: src/open_tmux_tabs/widgets/host_detail.py
+msgid "Delete"
+msgstr ""
+
+# ============================================================
+# Open view (right panel when "Open" entry is selected)
+# ============================================================
+
+#. The big quick-start button at the top of the Open view. Opens all
+#. running tmux sessions on all reachable hosts without requiring any
+#. selection. Never disabled.
+#: src/open_tmux_tabs/widgets/open_view.py
+msgid "Open all detected sessions"
+msgstr ""
+
+#. Section header above the per-host summary of selected sessions.
+#: src/open_tmux_tabs/widgets/open_view.py
+msgid "Selection summary:"
+msgstr ""
+
+#. Placeholder shown in the summary area when no sessions are selected
+#. and no new session names have been entered.
+#: src/open_tmux_tabs/widgets/open_view.py
+msgid "(no selection)"
+msgstr ""
+
+#. Total count line at the bottom of the summary.
+#. {total} is the total session count, {hosts} is the number of hosts.
+#. Keep both placeholders.
+#: src/open_tmux_tabs/widgets/open_view.py
+msgid "Total: {total} session(s) on {hosts} host(s)"
+msgstr ""
+
+#. Marker after a session name in the summary -- session already
+#. running on the host (will just be attached, not created).
+#: src/open_tmux_tabs/widgets/open_view.py
+msgid "(existing)"
+msgstr ""
+
+#. Marker after a session name in the summary -- session will be
+#. created on the host before being attached.
+#: src/open_tmux_tabs/widgets/open_view.py
+msgid "(new)"
+msgstr ""
+
+#. Button: open all selected sessions in a single Windows Terminal
+#. window (one tab per session, across all hosts).
+#. Used in Open view and Show All view.
+#: src/open_tmux_tabs/widgets/open_view.py
+#: src/open_tmux_tabs/widgets/show_all_view.py
+msgid "One WT – Open selection"
+msgstr ""
+
+#. Button: open one Windows Terminal window per host containing the
+#. selected sessions for that host.
+#. Used in Open view and Show All view.
+#: src/open_tmux_tabs/widgets/open_view.py
+#: src/open_tmux_tabs/widgets/show_all_view.py
+msgid "Per host – Open selection"
+msgstr ""
+
+# ============================================================
+# Confirm dialog (host deletion)
+# ============================================================
+
+#. Confirmation message asking the user to confirm host deletion.
+#. {name} is the host's display name -- keep the placeholder.
+#: src/open_tmux_tabs/app.py
+msgid "Delete host '{name}'?"
+msgstr ""
+
+#. Confirm dialog: yes button (confirm action).
+#: src/open_tmux_tabs/widgets/confirm_dialog.py
+msgid "Yes"
+msgstr ""
+
+#. Confirm dialog: no button (cancel action).
+#: src/open_tmux_tabs/widgets/confirm_dialog.py
+msgid "No"
+msgstr ""
+
+# ============================================================
+# Language selection dialog
+# ============================================================
+
+#. Title of the language selection dialog.
+#: src/open_tmux_tabs/widgets/language_dialog.py
+msgid "Select language:"
+msgstr ""
+
+#. Cancel button in the language selection dialog.
+#: src/open_tmux_tabs/widgets/language_dialog.py
+msgid "Cancel"
+msgstr ""
+
+#. Confirmation message shown after the user picked a different
+#. language. Asks whether to restart the application now to apply
+#. the change. {name} is the language code (e.g. "de").
+#: src/open_tmux_tabs/app.py
+msgid "Language changed to {name}. Restart now?"
+msgstr ""
+
+# ============================================================
+# Error dialog (used for SSH and other external errors)
+# ============================================================
+
+#. Error dialog: OK button to dismiss the error.
+#: src/open_tmux_tabs/widgets/error_dialog.py
+msgid "OK"
+msgstr ""
+
+#. Error dialog title shown when an SSH command for a specific host
+#. fails. {name} is the host's display name -- keep the placeholder.
+#: src/open_tmux_tabs/app.py
+msgid "Error on {name}"
+msgstr ""
+
+# ============================================================
+# Notifications (toast messages)
+# ============================================================
+
+#. Toast notification shown when the user clicks "Open all detected
+#. sessions" while some hosts are still being connected.
+#: src/open_tmux_tabs/app.py
+msgid "Waiting for pending connections..."
+msgstr ""
+
+# ============================================================
+# Footer bindings (global)
+# ============================================================
+
+#. Footer binding description for the Quit action (key: q).
+#: src/open_tmux_tabs/app.py
+msgid "Quit"
+msgstr ""
+
+#. Footer binding description for the Delete Host action (key: Delete).
+#: src/open_tmux_tabs/app.py
+msgid "Delete host"
+msgstr ""
+
+#. Footer binding description for the "jump to New host" action
+#. (key: n). Selects the "New host" entry in the host list and
+#. focuses the SSH target input field.
+#: src/open_tmux_tabs/app.py
+msgid "New host"
+msgstr ""
+
+#. Footer binding description for the "jump to Open" action
+#. (key: o). Selects the "Open" entry in the host list.
+#: src/open_tmux_tabs/app.py
+msgid "Open"
+msgstr ""
+
+#. Footer binding description for the "open all detected sessions"
+#. action (key: x). Triggers the quick-start action immediately
+#. without navigation.
+#: src/open_tmux_tabs/app.py
+msgid "Open all"
+msgstr ""
+
+#. Footer binding description for the language selection action
+#. (key: l). Opens a modal dialog to pick a different UI language.
+#: src/open_tmux_tabs/app.py
+msgid "Language"
+msgstr ""
+
+# ============================================================
+# SSH error messages (used inside the error dialog body)
+# ============================================================
+
+#. SSH error: connection took longer than the timeout (120s).
+#: src/open_tmux_tabs/ssh.py
+msgid "SSH connection timed out"
+msgstr ""
+
+#. SSH error: the ssh executable was not found in PATH.
+#: src/open_tmux_tabs/ssh.py
+msgid "ssh executable not found"
+msgstr ""
+
+#. SSH error: generic OS-level error. {error} is the underlying
+#. exception message -- keep the placeholder.
+#: src/open_tmux_tabs/ssh.py
+msgid "SSH error: {error}"
+msgstr ""
+
+#. SSH error: connection failed (non-zero exit code, no output).
+#. May be followed by stderr text on the next line.
+#: src/open_tmux_tabs/ssh.py
+msgid "SSH connection failed"
+msgstr ""
+
+# ============================================================
+# Set up host (interactive WT for SSH key deployment)
+# ============================================================
+
+#. Title of the Windows Terminal tab launched by "Set up host".
+#. {host} is the SSH target -- keep the placeholder.
+#: src/open_tmux_tabs/wt_launcher.py
+msgid "Setup: {host}"
+msgstr ""
+
+#. Error shown in the setup tab if no public key was found in
+#. ~/.ssh/. Comes from the PowerShell script that deploys the key.
+#: src/open_tmux_tabs/wt_launcher.py
+msgid "No SSH key found in %USERPROFILE%\\.ssh\\."
+msgstr ""
+
+#. Hint shown in the setup tab below the "no key" error. Tells the
+#. user how to create a key.
+#: src/open_tmux_tabs/wt_launcher.py
+msgid "Create one first with: ssh-keygen -t ed25519"
+msgstr ""
+
+#. Prompt shown in the setup tab to keep the window open until the
+#. user has read the result. Pressing Enter closes the tab.
+#: src/open_tmux_tabs/wt_launcher.py
+msgid "Press Enter to close"
+msgstr ""
+
+#. Status message in the setup tab while the key is being deployed.
+#. {key} is the public key filename, {host} is the SSH target.
+#. Both placeholders must be kept.
+#: src/open_tmux_tabs/wt_launcher.py
+msgid "Deploying {key} to {host}..."
+msgstr ""
+
+#. Confirmation message printed inside the setup tab after the key
+#. has been successfully appended to the remote authorized_keys.
+#: src/open_tmux_tabs/wt_launcher.py
+msgid "Key deployed."
+msgstr ""
+
+# ============================================================
+# Direct Session view
+# ============================================================
+
+#. Footer binding description for the jump-to-direct-session
+#. shortcut (key: +).
+#: src/open_tmux_tabs/app.py
+msgid "Direct session"
+msgstr ""
+
+#. Footer binding description for the jump-to-show-all
+#. shortcut (key: -).
+#: src/open_tmux_tabs/app.py
+msgid "Show all"
+msgstr ""
+
+# ============================================================
+# Show All view
+# ============================================================
+
+#. DataTable column header in Show All view.
+#: src/open_tmux_tabs/widgets/show_all_view.py
+msgid "Host"
+msgstr ""
+
+#. DataTable column header in Show All view.
+#: src/open_tmux_tabs/widgets/show_all_view.py
+msgid "Session"
+msgstr ""
+
+#. Placeholder shown in Show All view when no hosts are connected yet.
+#: src/open_tmux_tabs/widgets/show_all_view.py
+msgid "Waiting for connections..."
+msgstr ""
+
+# ============================================================
+# Direct Session view – buttons and labels
+# ============================================================
+
+#. Button in Direct Session view: execute in a single WT.
+#: src/open_tmux_tabs/widgets/direct_session_view.py
+msgid "One WT – Execute"
+msgstr ""
+
+#. Button in Direct Session view: one WT per host.
+#: src/open_tmux_tabs/widgets/direct_session_view.py
+msgid "Per host – Execute"
+msgstr ""
+
+#. Label in Direct Session view above the host input.
+#: src/open_tmux_tabs/widgets/direct_session_view.py
+msgid "Target hosts:"
+msgstr ""
+
+#. Label in Direct Session view above the session-name input.
+#: src/open_tmux_tabs/widgets/direct_session_view.py
+msgid "Session names (one per line):"
+msgstr ""
+
+#. Footer binding description for the execute action (key: j)
+#. in Direct Session view.
+#: src/open_tmux_tabs/widgets/direct_session_view.py
+msgid "Execute"
+msgstr ""
+
+# ============================================================
+# Native Windows GUI (tmux-helper-rs): settings, tray, help overlay
+# ============================================================
+
+msgid "About"
+msgstr ""
+
+msgid "Adds the typed SSH target to the list and connects to it in the background."
+msgstr ""
+
+msgid "Automatic (system language)"
+msgstr ""
+
+msgid "Background color:"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Connecting…"
+msgstr ""
+
+msgid "Creates the missing sessions on the selected hosts and opens all of them in one Windows Terminal window. Selection and names stay, so you can run it again."
+msgstr ""
+
+msgid "Creates the sessions typed in the field below on this host and opens them at once in one Windows Terminal window. Existing sessions with the same name are attached."
+msgstr ""
+
+msgid "Ctrl"
+msgstr ""
+
+msgid "Del"
+msgstr ""
+
+msgid "Direct start"
+msgstr ""
+
+msgid "Enter"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Fetches the session list from the host again."
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Filter…  (Ctrl+F)"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Hide host '{name}'? It stays in your SSH config file; add it again with \"New host\"."
+msgstr ""
+
+msgid "Hotkey"
+msgstr ""
+
+msgid "Inverts the selection of the visible entries."
+msgstr ""
+
+msgid "Jumps to Direct session: type session names once and start them on several hosts at the same time."
+msgstr ""
+
+msgid "Jumps to Show all: one sortable table with the sessions of all reachable hosts."
+msgstr ""
+
+msgid "Jumps to \"New host\" and puts the cursor in the input field. Enter an SSH target such as user@server or an alias from your SSH config."
+msgstr ""
+
+msgid "Jumps to the Open view: summary of your selection and the quick start button."
+msgstr ""
+
+msgid "Key:"
+msgstr ""
+
+msgid "Language:"
+msgstr ""
+
+msgid "Like Execute, but with one Windows Terminal window per host."
+msgstr ""
+
+msgid "Like One WT, but with one Windows Terminal window per host."
+msgstr ""
+
+msgid "Moves the cursor into the search field above the current list. The list shows only entries that contain the text (upper and lower case do not matter). Esc or Arrow down returns to the list."
+msgstr ""
+
+msgid "One WT"
+msgstr ""
+
+msgid "Opens all running sessions on all reachable hosts right away, one Windows Terminal window per host. Waits for hosts that are still connecting."
+msgstr ""
+
+msgid "Opens all selected sessions in a single Windows Terminal window. The selection stays."
+msgstr ""
+
+msgid "Opens all selected sessions, and creates the new ones, in a single Windows Terminal window. Afterwards the selection is cleared."
+msgstr ""
+
+msgid "Opens an interactive Windows Terminal window that copies your public SSH key to the host. You type the password once; afterwards the host connects without a password."
+msgstr ""
+
+msgid "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is."
+msgstr ""
+
+msgid "Opens the selected sessions with one Windows Terminal window per host. The selection stays."
+msgstr ""
+
+msgid "Opens the settings: language, hotkey, background color and start with Windows."
+msgstr ""
+
+msgid "Per host"
+msgstr ""
+
+msgid "Please select a key."
+msgstr ""
+
+msgid "Please select at least one modifier (Ctrl, Alt, Shift or Win)."
+msgstr ""
+
+msgid "Press {hotkey} to show or hide the window."
+msgstr ""
+
+msgid "Quits Open-TmuxTabs. The sessions on the hosts keep running. Closing the window or pressing Esc only hides it in the notification area."
+msgstr ""
+
+msgid "Reads your SSH config file again and reconnects to all hosts."
+msgstr ""
+
+msgid "Reload hosts"
+msgstr ""
+
+msgid "Removes the selected host after a confirmation. A host from your SSH config is only hidden in the app; the config file is not changed."
+msgstr ""
+
+msgid "Selects all visible entries, or deselects them if all are selected already. Entries hidden by the filter stay as they are."
+msgstr ""
+
+msgid "Selects or deselects the highlighted entry."
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Settings file"
+msgstr ""
+
+msgid "Shift"
+msgstr ""
+
+msgid "Shows the explanations of all shortcuts of the current view."
+msgstr ""
+
+msgid "Sort by host"
+msgstr ""
+
+msgid "Sort by session"
+msgstr ""
+
+msgid "Sorts the table by host. Press again to reverse the order."
+msgstr ""
+
+msgid "Sorts the table by session name. Press again to reverse the order."
+msgstr ""
+
+msgid "Space"
+msgstr ""
+
+msgid "Start with Windows"
+msgstr ""
+
+msgid "The hotkey {hotkey} is already in use.\n\nPlease choose a different one in the settings."
+msgstr ""
+
+msgid "The hotkey {hotkey} is already used by Windows or another program.\n\nPlease choose a different one."
+msgstr ""
+
+msgid "The settings could not be saved."
+msgstr ""
+
+msgid "Tries to connect to the host again."
+msgstr ""
+
+msgid "Windows Terminal (wt.exe) could not be started."
+msgstr ""
+
+msgid "hotkey not active"
+msgstr ""
+
+msgid "tmux sessions on remote Linux hosts as Windows Terminal tabs."
+msgstr ""
+
+msgid "{app} is running"
+msgstr ""

@@ -1,0 +1,398 @@
+# French translation for Open-TmuxTabs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: open-tmux-tabs 2.0.0\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "+ New host"
+msgstr "+ Nouvel hôte"
+
+msgid ">> Open"
+msgstr ">> Ouvrir"
+
+msgid "SSH target (user@host or alias):"
+msgstr "Cible SSH (user@hôte ou alias) :"
+
+msgid "root@server or ssh-alias"
+msgstr "root@serveur ou alias-ssh"
+
+msgid "Add host"
+msgstr "Ajouter l'hôte"
+
+msgid "Running sessions:"
+msgstr "Sessions en cours :"
+
+msgid "Toggle: [t]   All: [a]   Invert: [i]"
+msgstr "Basculer : [t]   Tous : [a]   Inverser : [i]"
+
+msgid "New sessions (one name per line):"
+msgstr "Nouvelles sessions (un nom par ligne) :"
+
+msgid "Reload"
+msgstr "Recharger"
+
+msgid "Toggle"
+msgstr "Basculer"
+
+msgid "Toggle All"
+msgstr "Tout basculer"
+
+msgid "Invert"
+msgstr "Inverser"
+
+msgid "Jump start"
+msgstr "Démarrage rapide"
+
+msgid "Invalid name: '{name}'"
+msgstr "Nom invalide : '{name}'"
+
+msgid "A session named '{name}' already exists."
+msgstr "Une session nommée '{name}' existe déjà."
+
+msgid "Status: connection failed"
+msgstr "Statut : échec de connexion"
+
+msgid "Reconnect"
+msgstr "Reconnecter"
+
+msgid "Set up host"
+msgstr "Configurer l'hôte"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Open all detected sessions"
+msgstr "Ouvrir toutes les sessions détectées"
+
+msgid "Selection summary:"
+msgstr "Résumé de la sélection :"
+
+msgid "(no selection)"
+msgstr "(aucune sélection)"
+
+msgid "Total: {total} session(s) on {hosts} host(s)"
+msgstr "Total : {total} session(s) sur {hosts} hôte(s)"
+
+msgid "(existing)"
+msgstr "(existante)"
+
+msgid "(new)"
+msgstr "(nouvelle)"
+
+msgid "One WT – Open selection"
+msgstr "Un WT – Ouvrir la sélection"
+
+msgid "Per host – Open selection"
+msgstr "Par hôte – Ouvrir la sélection"
+
+msgid "Delete host '{name}'?"
+msgstr "Supprimer l'hôte '{name}' ?"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Error on {name}"
+msgstr "Erreur sur {name}"
+
+msgid "Waiting for pending connections..."
+msgstr "En attente des connexions en cours..."
+
+msgid "Quit"
+msgstr "Quitter"
+
+msgid "Delete host"
+msgstr "Supprimer l'hôte"
+
+msgid "New host"
+msgstr "Nouvel hôte"
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "Open all"
+msgstr "Tout ouvrir"
+
+msgid "Language"
+msgstr "Langue"
+
+msgid "Select language:"
+msgstr "Choisir la langue :"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Language changed to {name}. Restart now?"
+msgstr "Langue changée en {name}. Redémarrer maintenant ?"
+
+msgid "SSH connection timed out"
+msgstr "Délai de connexion SSH dépassé"
+
+msgid "ssh executable not found"
+msgstr "exécutable ssh introuvable"
+
+msgid "SSH error: {error}"
+msgstr "Erreur SSH : {error}"
+
+msgid "SSH connection failed"
+msgstr "Échec de la connexion SSH"
+
+msgid "Setup: {host}"
+msgstr "Configuration : {host}"
+
+msgid "No SSH key found in %USERPROFILE%\\.ssh\\."
+msgstr "Aucune clé SSH trouvée dans %USERPROFILE%\\.ssh\\."
+
+msgid "Create one first with: ssh-keygen -t ed25519"
+msgstr "Créez-en une d'abord avec : ssh-keygen -t ed25519"
+
+msgid "Press Enter to close"
+msgstr "Appuyez sur Entrée pour fermer"
+
+msgid "Deploying {key} to {host}..."
+msgstr "Déploiement de {key} sur {host}..."
+
+msgid "Key deployed."
+msgstr "Clé déployée."
+
+# ============================================================
+# Direct Session / Show All (new features)
+# ============================================================
+
+msgid "Direct session"
+msgstr "Session directe"
+
+msgid "Show all"
+msgstr "Vue d'ensemble"
+
+msgid "Host"
+msgstr "Hôte"
+
+msgid "Session"
+msgstr "Session"
+
+msgid "Waiting for connections..."
+msgstr "En attente des connexions..."
+
+msgid "One WT – Execute"
+msgstr "Un WT – Exécuter"
+
+msgid "Per host – Execute"
+msgstr "Par hôte – Exécuter"
+
+msgid "Target hosts:"
+msgstr "Hôtes cibles :"
+
+msgid "Session names (one per line):"
+msgstr "Noms de session (un par ligne) :"
+
+msgid "Execute"
+msgstr "Exécuter"
+
+# ============================================================
+# Native Windows GUI (tmux-helper-rs): settings, tray, help overlay
+# ============================================================
+
+msgid "About"
+msgstr "À propos"
+
+msgid "Adds the typed SSH target to the list and connects to it in the background."
+msgstr "Ajoute la cible SSH saisie à la liste et s'y connecte en arrière-plan."
+
+msgid "Automatic (system language)"
+msgstr "Automatique (langue du système)"
+
+msgid "Background color:"
+msgstr "Couleur de fond :"
+
+msgid "Change"
+msgstr "Modifier"
+
+msgid "Connecting…"
+msgstr "Connexion…"
+
+msgid "Creates the missing sessions on the selected hosts and opens all of them in one Windows Terminal window. Selection and names stay, so you can run it again."
+msgstr "Crée les sessions manquantes sur les hôtes sélectionnés et les ouvre toutes dans une fenêtre Windows Terminal. La sélection et les noms restent, vous pouvez donc relancer."
+
+msgid "Creates the sessions typed in the field below on this host and opens them at once in one Windows Terminal window. Existing sessions with the same name are attached."
+msgstr "Crée sur cet hôte les sessions saisies dans le champ ci-dessous et les ouvre aussitôt dans une fenêtre Windows Terminal. Les sessions existantes du même nom sont rattachées."
+
+msgid "Ctrl"
+msgstr "Ctrl"
+
+msgid "Del"
+msgstr "Suppr"
+
+msgid "Direct start"
+msgstr "Démarrer directement"
+
+msgid "Enter"
+msgstr "Entrée"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Fetches the session list from the host again."
+msgstr "Récupère à nouveau la liste des sessions de l'hôte."
+
+msgid "Filter"
+msgstr "Filtre"
+
+msgid "Filter…  (Ctrl+F)"
+msgstr "Filtrer…  (Ctrl+F)"
+
+msgid "Help"
+msgstr "Aide"
+
+msgid "Hide host '{name}'? It stays in your SSH config file; add it again with \"New host\"."
+msgstr "Masquer l'hôte '{name}' ? Il reste dans votre configuration SSH ; ajoutez-le à nouveau avec « Nouvel hôte »."
+
+msgid "Hotkey"
+msgstr "Raccourci global"
+
+msgid "Inverts the selection of the visible entries."
+msgstr "Inverse la sélection des entrées visibles."
+
+msgid "Jumps to Direct session: type session names once and start them on several hosts at the same time."
+msgstr "Va à Session directe : saisissez une fois des noms de session et démarrez-les sur plusieurs hôtes à la fois."
+
+msgid "Jumps to Show all: one sortable table with the sessions of all reachable hosts."
+msgstr "Va à Vue d'ensemble : un tableau triable avec les sessions de tous les hôtes joignables."
+
+msgid "Jumps to \"New host\" and puts the cursor in the input field. Enter an SSH target such as user@server or an alias from your SSH config."
+msgstr "Va à « Nouvel hôte » et place le curseur dans le champ de saisie. Saisissez une cible SSH, par exemple user@serveur ou un alias de votre configuration SSH."
+
+msgid "Jumps to the Open view: summary of your selection and the quick start button."
+msgstr "Va à la vue Ouvrir : résumé de votre sélection et bouton de démarrage rapide."
+
+msgid "Key:"
+msgstr "Touche :"
+
+msgid "Language:"
+msgstr "Langue :"
+
+msgid "Like Execute, but with one Windows Terminal window per host."
+msgstr "Comme Exécuter, mais avec une fenêtre Windows Terminal par hôte."
+
+msgid "Like One WT, but with one Windows Terminal window per host."
+msgstr "Comme Un WT, mais avec une fenêtre Windows Terminal par hôte."
+
+msgid "Moves the cursor into the search field above the current list. The list shows only entries that contain the text (upper and lower case do not matter). Esc or Arrow down returns to the list."
+msgstr "Place le curseur dans le champ de recherche au-dessus de la liste. La liste n'affiche que les entrées contenant le texte (sans tenir compte de la casse). Échap ou Flèche bas ramène à la liste."
+
+msgid "One WT"
+msgstr "Un WT"
+
+msgid "Opens all running sessions on all reachable hosts right away, one Windows Terminal window per host. Waits for hosts that are still connecting."
+msgstr "Ouvre immédiatement toutes les sessions en cours sur tous les hôtes joignables, une fenêtre Windows Terminal par hôte. Attend les hôtes encore en cours de connexion."
+
+msgid "Opens all selected sessions in a single Windows Terminal window. The selection stays."
+msgstr "Ouvre toutes les sessions sélectionnées dans une seule fenêtre Windows Terminal. La sélection reste."
+
+msgid "Opens all selected sessions, and creates the new ones, in a single Windows Terminal window. Afterwards the selection is cleared."
+msgstr "Ouvre toutes les sessions sélectionnées, et crée les nouvelles, dans une seule fenêtre Windows Terminal. Ensuite la sélection est vidée."
+
+msgid "Opens an interactive Windows Terminal window that copies your public SSH key to the host. You type the password once; afterwards the host connects without a password."
+msgstr "Ouvre une fenêtre Windows Terminal interactive qui copie votre clé SSH publique sur l'hôte. Vous saisissez le mot de passe une fois ; ensuite l'hôte se connecte sans mot de passe."
+
+msgid "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is."
+msgstr "Ouvre immédiatement la session en surbrillance dans un onglet Windows Terminal. La sélection ne change pas."
+
+msgid "Opens the selected sessions with one Windows Terminal window per host. The selection stays."
+msgstr "Ouvre les sessions sélectionnées avec une fenêtre Windows Terminal par hôte. La sélection reste."
+
+msgid "Opens the settings: language, hotkey, background color and start with Windows."
+msgstr "Ouvre les paramètres : langue, raccourci global, couleur de fond et démarrage avec Windows."
+
+msgid "Per host"
+msgstr "Par hôte"
+
+msgid "Please select a key."
+msgstr "Veuillez choisir une touche."
+
+msgid "Please select at least one modifier (Ctrl, Alt, Shift or Win)."
+msgstr "Veuillez choisir au moins un modificateur (Ctrl, Alt, Maj ou Win)."
+
+msgid "Press {hotkey} to show or hide the window."
+msgstr "{hotkey} affiche ou masque la fenêtre."
+
+msgid "Quits Open-TmuxTabs. The sessions on the hosts keep running. Closing the window or pressing Esc only hides it in the notification area."
+msgstr "Quitte Open-TmuxTabs. Les sessions sur les hôtes continuent. Fermer la fenêtre ou appuyer sur Échap la masque seulement dans la zone de notification."
+
+msgid "Reads your SSH config file again and reconnects to all hosts."
+msgstr "Relit votre fichier de configuration SSH et reconnecte tous les hôtes."
+
+msgid "Reload hosts"
+msgstr "Recharger les hôtes"
+
+msgid "Removes the selected host after a confirmation. A host from your SSH config is only hidden in the app; the config file is not changed."
+msgstr "Supprime l'hôte sélectionné après confirmation. Un hôte de votre configuration SSH est seulement masqué dans l'application ; le fichier n'est pas modifié."
+
+msgid "Selects all visible entries, or deselects them if all are selected already. Entries hidden by the filter stay as they are."
+msgstr "Sélectionne toutes les entrées visibles, ou les désélectionne si elles le sont déjà toutes. Les entrées masquées par le filtre ne changent pas."
+
+msgid "Selects or deselects the highlighted entry."
+msgstr "Sélectionne ou désélectionne l'entrée en surbrillance."
+
+msgid "Settings"
+msgstr "Paramètres"
+
+msgid "Settings file"
+msgstr "Fichier de paramètres"
+
+msgid "Shift"
+msgstr "Maj"
+
+msgid "Shows the explanations of all shortcuts of the current view."
+msgstr "Affiche les explications de tous les raccourcis de la vue actuelle."
+
+msgid "Sort by host"
+msgstr "Trier par hôte"
+
+msgid "Sort by session"
+msgstr "Trier par session"
+
+msgid "Sorts the table by host. Press again to reverse the order."
+msgstr "Trie le tableau par hôte. Appuyez à nouveau pour inverser l'ordre."
+
+msgid "Sorts the table by session name. Press again to reverse the order."
+msgstr "Trie le tableau par nom de session. Appuyez à nouveau pour inverser l'ordre."
+
+msgid "Space"
+msgstr "Espace"
+
+msgid "Start with Windows"
+msgstr "Démarrer avec Windows"
+
+msgid "The hotkey {hotkey} is already in use.\n\nPlease choose a different one in the settings."
+msgstr "Le raccourci {hotkey} est déjà utilisé.\n\nVeuillez en choisir un autre dans les paramètres."
+
+msgid "The hotkey {hotkey} is already used by Windows or another program.\n\nPlease choose a different one."
+msgstr "Le raccourci {hotkey} est déjà utilisé par Windows ou un autre programme.\n\nVeuillez en choisir un autre."
+
+msgid "The settings could not be saved."
+msgstr "Les paramètres n'ont pas pu être enregistrés."
+
+msgid "Tries to connect to the host again."
+msgstr "Tente à nouveau de se connecter à l'hôte."
+
+msgid "Windows Terminal (wt.exe) could not be started."
+msgstr "Impossible de démarrer Windows Terminal (wt.exe)."
+
+msgid "hotkey not active"
+msgstr "raccourci inactif"
+
+msgid "tmux sessions on remote Linux hosts as Windows Terminal tabs."
+msgstr "Sessions tmux sur des hôtes Linux distants comme onglets Windows Terminal."
+
+msgid "{app} is running"
+msgstr "{app} est en cours d'exécution"
