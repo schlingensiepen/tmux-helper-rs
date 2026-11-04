@@ -62,7 +62,11 @@ pub fn language() -> &'static str {
 }
 
 pub fn native_name(code: &str) -> &'static str {
-    LANGUAGES.iter().find(|(c, _, _)| *c == code).map(|(_, n, _)| *n).unwrap_or("English")
+    LANGUAGES
+        .iter()
+        .find(|(c, _, _)| *c == code)
+        .map(|(_, n, _)| *n)
+        .unwrap_or("English")
 }
 
 pub fn is_rtl() -> bool {
@@ -131,12 +135,21 @@ mod catalog_tests {
         let ids: Vec<String> = pot
             .lines()
             .filter_map(|l| l.strip_prefix("msgid \""))
-            .map(|l| po::parse(&format!("msgid \"{l}\nmsgstr \"x\"\n")).into_keys().next().unwrap_or_default())
+            .map(|l| {
+                po::parse(&format!("msgid \"{l}\nmsgstr \"x\"\n"))
+                    .into_keys()
+                    .next()
+                    .unwrap_or_default()
+            })
             .filter(|s| !s.is_empty())
             .collect();
         assert!(ids.len() > 100);
         let ph = |s: &str| {
-            let mut v: Vec<String> = s.split('{').skip(1).filter_map(|p| p.split_once('}').map(|x| x.0.to_string())).collect();
+            let mut v: Vec<String> = s
+                .split('{')
+                .skip(1)
+                .filter_map(|p| p.split_once('}').map(|x| x.0.to_string()))
+                .collect();
             v.sort();
             v
         };
@@ -178,7 +191,11 @@ mod catalog_tests {
         for src in &files {
             for marker in ["tr(\"", "trf(\"", "it(\""] {
                 for (i, _) in src.match_indices(marker) {
-                    if src[..i].chars().last().is_some_and(|c| c.is_alphanumeric() || c == '_' || c == '.') {
+                    if src[..i]
+                        .chars()
+                        .last()
+                        .is_some_and(|c| c.is_alphanumeric() || c == '_' || c == '.')
+                    {
                         continue;
                     }
                     let rest = &src[i + marker.len()..];
@@ -194,7 +211,10 @@ mod catalog_tests {
                             match c {
                                 '\\' => {
                                     if let Some((_, e)) = chars.next() {
-                                        out.push(match e { 'n' => '\n', o => o });
+                                        out.push(match e {
+                                            'n' => '\n',
+                                            o => o,
+                                        });
                                     }
                                 }
                                 '"' => {

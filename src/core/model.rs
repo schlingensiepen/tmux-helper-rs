@@ -58,7 +58,11 @@ impl Host {
 
     /// Sessions that pass the session filter.
     pub fn visible_sessions(&self) -> Vec<String> {
-        self.sessions.iter().filter(|s| matches(&self.filter, s)).cloned().collect()
+        self.sessions
+            .iter()
+            .filter(|s| matches(&self.filter, s))
+            .cloned()
+            .collect()
     }
 }
 
@@ -223,13 +227,19 @@ impl Model {
     }
 
     pub fn manual_targets(&self) -> Vec<String> {
-        self.hosts.iter().filter(|h| h.source == Source::Manual).map(|h| h.target.clone()).collect()
+        self.hosts
+            .iter()
+            .filter(|h| h.source == Source::Manual)
+            .map(|h| h.target.clone())
+            .collect()
     }
 
     /// Indices of hosts that pass the host-list filter.
     pub fn visible_hosts(&self) -> Vec<usize> {
         (0..self.hosts.len())
-            .filter(|&i| matches(&self.host_filter, &self.hosts[i].display) || matches(&self.host_filter, &self.hosts[i].target))
+            .filter(|&i| {
+                matches(&self.host_filter, &self.hosts[i].display) || matches(&self.host_filter, &self.hosts[i].target)
+            })
             .collect()
     }
 
@@ -317,7 +327,11 @@ impl Model {
             .iter()
             .filter(|h| h.status == Status::Connected)
             .flat_map(|h| {
-                h.sessions.iter().map(move |s| Row { target: h.target.clone(), display: h.display.clone(), session: s.clone() })
+                h.sessions.iter().map(move |s| Row {
+                    target: h.target.clone(),
+                    display: h.display.clone(),
+                    session: s.clone(),
+                })
             })
             .collect();
         rows.sort_by(|a, b| {
@@ -325,8 +339,15 @@ impl Model {
                 SortKey::Host => ((&a.display, &a.session), (&b.display, &b.session)),
                 SortKey::Session => ((&a.session, &a.display), (&b.session, &b.display)),
             };
-            let o = x.0.to_lowercase().cmp(&y.0.to_lowercase()).then(x.1.to_lowercase().cmp(&y.1.to_lowercase()));
-            if self.all_asc { o } else { o.reverse() }
+            let o =
+                x.0.to_lowercase()
+                    .cmp(&y.0.to_lowercase())
+                    .then(x.1.to_lowercase().cmp(&y.1.to_lowercase()));
+            if self.all_asc {
+                o
+            } else {
+                o.reverse()
+            }
         });
         rows
     }
@@ -334,7 +355,11 @@ impl Model {
     pub fn all_visible_rows(&self) -> Vec<Row> {
         self.all_rows()
             .into_iter()
-            .filter(|r| matches(&self.all_filter, &r.display) || matches(&self.all_filter, &r.session) || matches(&self.all_filter, &r.target))
+            .filter(|r| {
+                matches(&self.all_filter, &r.display)
+                    || matches(&self.all_filter, &r.session)
+                    || matches(&self.all_filter, &r.target)
+            })
             .collect()
     }
 
@@ -364,7 +389,11 @@ mod tests {
 
     fn model() -> Model {
         let mut m = Model::default();
-        m.load_hosts(&["cfg1".into(), "cfg2".into()], &["root@m".into(), "cfg1".into()], &["cfg2".into()]);
+        m.load_hosts(
+            &["cfg1".into(), "cfg2".into()],
+            &["root@m".into(), "cfg1".into()],
+            &["cfg2".into()],
+        );
         m
     }
 

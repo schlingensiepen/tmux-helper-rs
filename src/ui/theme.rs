@@ -45,7 +45,11 @@ pub unsafe fn build(bg: COLORREF) -> Theme {
         dark,
         bg,
         panel: mix(bg, up, if dark { 0.04 } else { 0.03 }),
-        field: if dark { mix(bg, up, 0.10) } else { mix(bg, rgb(255, 255, 255), 0.85) },
+        field: if dark {
+            mix(bg, up, 0.10)
+        } else {
+            mix(bg, rgb(255, 255, 255), 0.85)
+        },
         button: mix(bg, up, if dark { 0.12 } else { 0.08 }),
         button_hot: mix(bg, up, if dark { 0.18 } else { 0.13 }),
         button_down: mix(bg, up, if dark { 0.24 } else { 0.18 }),

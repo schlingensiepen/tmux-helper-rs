@@ -58,8 +58,14 @@ unsafe fn task_dialog(title: &str, text: &str, icon: PCWSTR, buttons: &[(i32, St
     let c = wide(text);
     let app = wide(APP_NAME);
     let labels: Vec<Vec<u16>> = buttons.iter().map(|(_, l)| wide(l)).collect();
-    let btns: Vec<TASKDIALOG_BUTTON> =
-        buttons.iter().zip(&labels).map(|((id, _), l)| TASKDIALOG_BUTTON { nButtonID: *id, pszButtonText: PCWSTR(l.as_ptr()) }).collect();
+    let btns: Vec<TASKDIALOG_BUTTON> = buttons
+        .iter()
+        .zip(&labels)
+        .map(|((id, _), l)| TASKDIALOG_BUTTON {
+            nButtonID: *id,
+            pszButtonText: PCWSTR(l.as_ptr()),
+        })
+        .collect();
     let mut flags = TDF_ALLOW_DIALOG_CANCELLATION | TDF_POSITION_RELATIVE_TO_WINDOW;
     if i18n::is_rtl() {
         flags |= TDF_RTL_LAYOUT;
@@ -85,7 +91,13 @@ unsafe fn task_dialog(title: &str, text: &str, icon: PCWSTR, buttons: &[(i32, St
 
 /// Yes/No question; Esc counts as No.
 pub unsafe fn confirm(question: &str) -> bool {
-    let r = task_dialog(question, "", TD_WARNING_ICON, &[(IDYES.0, tr("Yes")), (IDNO.0, tr("No"))], IDNO.0);
+    let r = task_dialog(
+        question,
+        "",
+        TD_WARNING_ICON,
+        &[(IDYES.0, tr("Yes")), (IDNO.0, tr("No"))],
+        IDNO.0,
+    );
     r == IDYES.0
 }
 
@@ -120,15 +132,36 @@ pub unsafe fn show_overlay(text: &str, anchor: Option<RECT>) {
     *std::ptr::addr_of_mut!(HELP_TEXT) = text.to_string();
     let main = st().main;
     if st().help_wnd.is_invalid() {
-        let ex = WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | if i18n::is_rtl() { WS_EX_LAYOUTRTL } else { WINDOW_EX_STYLE(0) };
-        st().help_wnd = CreateWindowExW(ex, HELP_CLASS, PCWSTR::null(), WS_POPUP | WS_BORDER, 0, 0, 10, 10, Some(main), None, Some(st().inst), None)
-            .unwrap_or_default();
+        let ex = WS_EX_TOOLWINDOW
+            | WS_EX_NOACTIVATE
+            | if i18n::is_rtl() {
+                WS_EX_LAYOUTRTL
+            } else {
+                WINDOW_EX_STYLE(0)
+            };
+        st().help_wnd = CreateWindowExW(
+            ex,
+            HELP_CLASS,
+            PCWSTR::null(),
+            WS_POPUP | WS_BORDER,
+            0,
+            0,
+            10,
+            10,
+            Some(main),
+            None,
+            Some(st().inst),
+            None,
+        )
+        .unwrap_or_default();
     }
     let h = st().help_wnd;
     let mut client = RECT::default();
     let _ = GetClientRect(main, &mut client);
     let pad = s(12);
-    let width = if anchor.is_some() { s(420) } else { s(640) }.min(client.right - s(40)).max(s(200));
+    let width = if anchor.is_some() { s(420) } else { s(640) }
+        .min(client.right - s(40))
+        .max(s(200));
     let dc = GetDC(Some(h));
     let of = SelectObject(dc, st().font.into());
     let mut w: Vec<u16> = text.encode_utf16().collect();
@@ -148,10 +181,24 @@ pub unsafe fn show_overlay(text: &str, anchor: Option<RECT>) {
             rect(x, footer_top - height - s(6), x + width, footer_top - s(6))
         }
     };
-    let mut pts = [POINT { x: r.left, y: r.top }, POINT { x: r.right, y: r.bottom }];
+    let mut pts = [
+        POINT { x: r.left, y: r.top },
+        POINT {
+            x: r.right,
+            y: r.bottom,
+        },
+    ];
     MapWindowPoints(Some(main), None, &mut pts);
     r = rect(pts[0].x.min(pts[1].x), pts[0].y, pts[0].x.max(pts[1].x), pts[1].y);
-    let _ = SetWindowPos(h, Some(HWND_TOP), r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_NOACTIVATE | SWP_SHOWWINDOW);
+    let _ = SetWindowPos(
+        h,
+        Some(HWND_TOP),
+        r.left,
+        r.top,
+        r.right - r.left,
+        r.bottom - r.top,
+        SWP_NOACTIVATE | SWP_SHOWWINDOW,
+    );
     let _ = InvalidateRect(Some(h), None, true);
 }
 
@@ -167,7 +214,13 @@ unsafe extern "system" fn help_proc(h: HWND, m: u32, wp: WPARAM, lp: LPARAM) -> 
             fill(dc, &rect(rc.left, rc.top, rc.right, rc.top + s(3)), th.accent);
             let of = SelectObject(dc, st().font.into());
             let pad = s(12);
-            draw_text(dc, help_text(), rect(pad, pad, rc.right - pad, rc.bottom - pad), th.text, help_format());
+            draw_text(
+                dc,
+                help_text(),
+                rect(pad, pad, rc.right - pad, rc.bottom - pad),
+                th.text,
+                help_format(),
+            );
             SelectObject(dc, of);
             let _ = EndPaint(h, &ps);
             return LRESULT(0);
@@ -270,13 +323,21 @@ unsafe fn apply_settings() {
     let d = st().settings_wnd;
     let mut ns = st().set.clone();
     ns.mods = 0;
-    for (id, m) in [(IDS_CTRL, MOD_CONTROL.0), (IDS_ALT, MOD_ALT.0), (IDS_SHIFT, MOD_SHIFT.0), (IDS_WIN, MOD_WIN.0)] {
+    for (id, m) in [
+        (IDS_CTRL, MOD_CONTROL.0),
+        (IDS_ALT, MOD_ALT.0),
+        (IDS_SHIFT, MOD_SHIFT.0),
+        (IDS_WIN, MOD_WIN.0),
+    ] {
         if checked(d, id) {
             ns.mods |= m;
         }
     }
     if ns.mods == 0 {
-        error(&tr("Settings"), &tr("Please select at least one modifier (Ctrl, Alt, Shift or Win)."));
+        error(
+            &tr("Settings"),
+            &tr("Please select at least one modifier (Ctrl, Alt, Shift or Win)."),
+        );
         return;
     }
     let key_cb = GetDlgItem(Some(d), IDS_KEY).unwrap_or_default();
@@ -438,23 +499,54 @@ pub unsafe fn show_settings(focus_language: bool) {
     let dpi = st().dpi;
     let sc = |v: i32| mul_div(v, dpi as i32, 96);
     let style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
-    let ex = WS_EX_DLGMODALFRAME | WS_EX_CONTROLPARENT | if i18n::is_rtl() { WS_EX_LAYOUTRTL } else { WINDOW_EX_STYLE(0) };
+    let ex = WS_EX_DLGMODALFRAME
+        | WS_EX_CONTROLPARENT
+        | if i18n::is_rtl() {
+            WS_EX_LAYOUTRTL
+        } else {
+            WINDOW_EX_STYLE(0)
+        };
     let (cw, ch) = (420, 470);
     let mut rc = rect(0, 0, sc(cw), sc(ch));
     let _ = windows::Win32::UI::HiDpi::AdjustWindowRectExForDpi(&mut rc, style, false, ex, dpi);
     let (ww, wh) = (rc.right - rc.left, rc.bottom - rc.top);
     let mut mr = RECT::default();
     let _ = GetWindowRect(main, &mut mr);
-    let (x, y) = (mr.left + (mr.right - mr.left - ww) / 2, mr.top + (mr.bottom - mr.top - wh) / 2);
+    let (x, y) = (
+        mr.left + (mr.right - mr.left - ww) / 2,
+        mr.top + (mr.bottom - mr.top - wh) / 2,
+    );
     let inst = st().inst;
     let title = format!("{APP_NAME} – {}", tr("Settings"));
-    let Ok(d) = CreateWindowExW(ex, SETTINGS_CLASS, &hs(&title), style, x, y, ww, wh, Some(main), None, Some(inst), None) else {
+    let Ok(d) = CreateWindowExW(
+        ex,
+        SETTINGS_CLASS,
+        &hs(&title),
+        style,
+        x,
+        y,
+        ww,
+        wh,
+        Some(main),
+        None,
+        Some(inst),
+        None,
+    ) else {
         return;
     };
     st().settings_wnd = d;
     *dlg() = Dlg::default();
-    let mut ncm = NONCLIENTMETRICSW { cbSize: size_of::<NONCLIENTMETRICSW>() as u32, ..Default::default() };
-    let _ = SystemParametersInfoForDpi(SPI_GETNONCLIENTMETRICS.0, ncm.cbSize, Some(&mut ncm as *mut _ as *mut c_void), 0, dpi);
+    let mut ncm = NONCLIENTMETRICSW {
+        cbSize: size_of::<NONCLIENTMETRICSW>() as u32,
+        ..Default::default()
+    };
+    let _ = SystemParametersInfoForDpi(
+        SPI_GETNONCLIENTMETRICS.0,
+        ncm.cbSize,
+        Some(&mut ncm as *mut _ as *mut c_void),
+        0,
+        dpi,
+    );
     dlg().font = CreateFontIndirectW(&ncm.lfMessageFont);
     let font = dlg().font;
     let mk = |cls: PCWSTR, txt: &str, st_: u32, x0: i32, y0: i32, w0: i32, h0: i32, id: i32, ex: u32| -> HWND {
@@ -480,10 +572,30 @@ pub unsafe fn show_settings(focus_language: bool) {
     let cb = BS_AUTOCHECKBOX as u32 | tab;
     // Language first: it is what most people come here for.
     mk(w!("STATIC"), &tr("Language:"), SS_LEFT, 12, 12, 396, 20, -1, 0);
-    let lf = mk(w!("EDIT"), "", ES_AUTOHSCROLL as u32 | tab, 12, 34, 396, 24, IDS_LANG_FILTER, WS_EX_CLIENTEDGE.0);
+    let lf = mk(
+        w!("EDIT"),
+        "",
+        ES_AUTOHSCROLL as u32 | tab,
+        12,
+        34,
+        396,
+        24,
+        IDS_LANG_FILTER,
+        WS_EX_CLIENTEDGE.0,
+    );
     let cue = wide(&tr("Filter…  (Ctrl+F)"));
     send(lf, EM_SETCUEBANNER, 1, cue.as_ptr() as isize);
-    let ll = mk(w!("LISTBOX"), "", (LBS_NOTIFY | LBS_NOINTEGRALHEIGHT) as u32 | WS_VSCROLL.0 | tab, 12, 62, 396, 150, IDS_LANG_LIST, WS_EX_CLIENTEDGE.0);
+    let ll = mk(
+        w!("LISTBOX"),
+        "",
+        (LBS_NOTIFY | LBS_NOINTEGRALHEIGHT) as u32 | WS_VSCROLL.0 | tab,
+        12,
+        62,
+        396,
+        150,
+        IDS_LANG_LIST,
+        WS_EX_CLIENTEDGE.0,
+    );
     dlg().lang_filter = lf;
     dlg().lang_list = ll;
     mk(w!("BUTTON"), &tr("Hotkey"), BS_GROUPBOX as u32, 12, 222, 396, 88, -1, 0);
@@ -497,10 +609,50 @@ pub unsafe fn show_settings(focus_language: bool) {
     mk(w!("STATIC"), &tr("Background color:"), SS_LEFT, 12, 330, 200, 20, -1, 0);
     let sw = mk(w!("STATIC"), "", SS_SUNKEN, 230, 326, 40, 24, IDS_SWATCH, 0);
     dlg().swatch = sw;
-    mk(w!("BUTTON"), &(tr("Change") + " …"), BS_PUSHBUTTON as u32 | tab, 278, 325, 130, 26, IDS_COLORBTN, 0);
-    mk(w!("BUTTON"), &tr("Start with Windows"), cb, 12, 370, 396, 20, IDS_AUTOSTART, 0);
-    mk(w!("BUTTON"), &tr("OK"), BS_DEFPUSHBUTTON as u32 | tab, 232, 426, 84, 28, IDOK.0, 0);
-    mk(w!("BUTTON"), &tr("Cancel"), BS_PUSHBUTTON as u32 | tab, 324, 426, 84, 28, IDCANCEL.0, 0);
+    mk(
+        w!("BUTTON"),
+        &(tr("Change") + " …"),
+        BS_PUSHBUTTON as u32 | tab,
+        278,
+        325,
+        130,
+        26,
+        IDS_COLORBTN,
+        0,
+    );
+    mk(
+        w!("BUTTON"),
+        &tr("Start with Windows"),
+        cb,
+        12,
+        370,
+        396,
+        20,
+        IDS_AUTOSTART,
+        0,
+    );
+    mk(
+        w!("BUTTON"),
+        &tr("OK"),
+        BS_DEFPUSHBUTTON as u32 | tab,
+        232,
+        426,
+        84,
+        28,
+        IDOK.0,
+        0,
+    );
+    mk(
+        w!("BUTTON"),
+        &tr("Cancel"),
+        BS_PUSHBUTTON as u32 | tab,
+        324,
+        426,
+        84,
+        28,
+        IDCANCEL.0,
+        0,
+    );
 
     let set = st().set.clone();
     let chk = |id: i32, on: bool| {
@@ -510,8 +662,17 @@ pub unsafe fn show_settings(focus_language: bool) {
     chk(IDS_ALT, set.mods & MOD_ALT.0 != 0);
     chk(IDS_SHIFT, set.mods & MOD_SHIFT.0 != 0);
     chk(IDS_WIN, set.mods & MOD_WIN.0 != 0);
-    let mut keys: Vec<u32> = (0x41..=0x5A).chain(0x30..=0x39).chain(VK_F1.0 as u32..=VK_F12.0 as u32).collect();
-    keys.extend([VK_SPACE.0 as u32, VK_OEM_PERIOD.0 as u32, VK_OEM_COMMA.0 as u32, VK_OEM_MINUS.0 as u32, VK_OEM_PLUS.0 as u32]);
+    let mut keys: Vec<u32> = (0x41..=0x5A)
+        .chain(0x30..=0x39)
+        .chain(VK_F1.0 as u32..=VK_F12.0 as u32)
+        .collect();
+    keys.extend([
+        VK_SPACE.0 as u32,
+        VK_OEM_PERIOD.0 as u32,
+        VK_OEM_COMMA.0 as u32,
+        VK_OEM_MINUS.0 as u32,
+        VK_OEM_PLUS.0 as u32,
+    ]);
     if !keys.contains(&set.vk) {
         keys.push(set.vk);
     }

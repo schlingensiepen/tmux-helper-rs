@@ -39,10 +39,23 @@ fn render(s: u32) -> Vec<Vec<u8>> {
     for k in 0..3 {
         let x = m + k as f64 * tab_w;
         let col = if k == 0 { ACCENT } else { TILE };
-        shapes.push(((x + sf * 0.01, tab_top, x + tab_w - sf * 0.01, body_top + sf * 0.04), sf * 0.04, col));
+        shapes.push((
+            (x + sf * 0.01, tab_top, x + tab_w - sf * 0.01, body_top + sf * 0.04),
+            sf * 0.04,
+            col,
+        ));
     }
     shapes.push(((m, body_top, sf - m, sf - m), sf * 0.06, TILE));
-    shapes.push(((m + sf * 0.05, body_top + sf * 0.05, sf - m - sf * 0.05, sf - m - sf * 0.05), sf * 0.03, BG));
+    shapes.push((
+        (
+            m + sf * 0.05,
+            body_top + sf * 0.05,
+            sf - m - sf * 0.05,
+            sf - m - sf * 0.05,
+        ),
+        sf * 0.03,
+        BG,
+    ));
     shapes.push(((m + sf * 0.12, sf * 0.58, m + sf * 0.36, sf * 0.66), sf * 0.02, ACCENT));
     let n = (SS * SS) as f64;
     (0..s)
@@ -181,5 +194,7 @@ END
         println!("cargo:warning=non-Windows host: resources (icon, manifest, version) not embedded");
         return;
     }
-    embed_resource::compile(&rc_path, embed_resource::NONE).manifest_required().unwrap();
+    embed_resource::compile(&rc_path, embed_resource::NONE)
+        .manifest_required()
+        .unwrap();
 }

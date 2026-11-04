@@ -25,7 +25,9 @@ jobs:
         run: |
           rustup update stable --no-self-update
           rustup default stable
-          rustup component add clippy
+          rustup component add clippy rustfmt
+      - name: Format
+        run: cargo fmt --check
       - name: Test
         run: cargo test --locked
       - name: Lint

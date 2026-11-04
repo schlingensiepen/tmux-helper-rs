@@ -59,7 +59,9 @@ pub fn resolve_from_ssh_g(alias: &str, ssh_g_output: &str, fallback_user: &str) 
     let mut user = "";
     for line in ssh_g_output.lines() {
         let mut it = line.trim().splitn(2, char::is_whitespace);
-        let (Some(k), Some(v)) = (it.next(), it.next()) else { continue };
+        let (Some(k), Some(v)) = (it.next(), it.next()) else {
+            continue;
+        };
         match k.to_ascii_lowercase().as_str() {
             "hostname" => hostname = v.trim(),
             "user" => user = v.trim(),
@@ -101,7 +103,10 @@ mod tests {
     fn ssh_g() {
         let out = "user jsp\nhostname 10.0.0.1\nport 22\n";
         assert_eq!(resolve_from_ssh_g("devbox", out, "me").as_deref(), Some("jsp@devbox"));
-        assert_eq!(resolve_from_ssh_g("devbox", "hostname x\n", "me").as_deref(), Some("me@devbox"));
+        assert_eq!(
+            resolve_from_ssh_g("devbox", "hostname x\n", "me").as_deref(),
+            Some("me@devbox")
+        );
         assert_eq!(resolve_from_ssh_g("devbox", "port 22\n", "me"), None);
     }
 }

@@ -28,7 +28,12 @@ pub fn mix(a: COLORREF, b: COLORREF, t: f64) -> COLORREF {
     rgb(m(cr_r(a), cr_r(b)), m(cr_g(a), cr_g(b)), m(cr_b(a), cr_b(b)))
 }
 pub fn rect(l: i32, t: i32, r: i32, b: i32) -> RECT {
-    RECT { left: l, top: t, right: r, bottom: b }
+    RECT {
+        left: l,
+        top: t,
+        right: r,
+        bottom: b,
+    }
 }
 pub fn loword(v: usize) -> u32 {
     (v & 0xFFFF) as u32
@@ -49,7 +54,10 @@ pub fn pt_in(r: &RECT, x: i32, y: i32) -> bool {
     x >= r.left && x < r.right && y >= r.top && y < r.bottom
 }
 pub fn now_secs() -> u64 {
-    std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0)
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0)
 }
 pub fn arg_present(name: &str) -> bool {
     std::env::args().skip(1).any(|a| a.eq_ignore_ascii_case(name))
@@ -99,7 +107,14 @@ pub unsafe fn enable(h: HWND, on: bool) {
 }
 pub unsafe fn move_to(h: HWND, r: RECT) {
     if !h.is_invalid() {
-        let _ = MoveWindow(h, r.left, r.top, (r.right - r.left).max(0), (r.bottom - r.top).max(0), true);
+        let _ = MoveWindow(
+            h,
+            r.left,
+            r.top,
+            (r.right - r.left).max(0),
+            (r.bottom - r.top).max(0),
+            true,
+        );
     }
 }
 pub unsafe fn text_size(dc: HDC, s: &str) -> SIZE {

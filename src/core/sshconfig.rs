@@ -119,9 +119,16 @@ pub fn include_paths(ssh_dir: &Path, home: &Path, arg: &str) -> Vec<PathBuf> {
         home.join(r)
     } else {
         let p = PathBuf::from(arg);
-        if p.is_absolute() { p } else { ssh_dir.join(p) }
+        if p.is_absolute() {
+            p
+        } else {
+            ssh_dir.join(p)
+        }
     };
-    let name = expanded.file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
+    let name = expanded
+        .file_name()
+        .map(|n| n.to_string_lossy().to_string())
+        .unwrap_or_default();
     if !name.contains(['*', '?']) {
         return vec![expanded];
     }
@@ -142,7 +149,9 @@ pub fn include_paths(ssh_dir: &Path, home: &Path, arg: &str) -> Vec<PathBuf> {
 /// does not exist).
 pub fn read_hosts(home: &Path) -> Vec<String> {
     let ssh_dir = home.join(".ssh");
-    let Ok(text) = std::fs::read_to_string(ssh_dir.join("config")) else { return Vec::new() };
+    let Ok(text) = std::fs::read_to_string(ssh_dir.join("config")) else {
+        return Vec::new();
+    };
     let mut include = |arg: &str| -> Vec<String> {
         include_paths(&ssh_dir, home, arg)
             .into_iter()

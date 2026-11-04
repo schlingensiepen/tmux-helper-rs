@@ -28,7 +28,12 @@ pub struct Settings {
 
 impl Default for Settings {
     fn default() -> Self {
-        Settings { mods: MOD_CONTROL.0 | MOD_ALT.0, vk: 'T' as u32, bg: rgb(28, 30, 36), language: None }
+        Settings {
+            mods: MOD_CONTROL.0 | MOD_ALT.0,
+            vk: 'T' as u32,
+            bg: rgb(28, 30, 36),
+            language: None,
+        }
     }
 }
 
@@ -36,14 +41,24 @@ pub fn valid_key(vk: u32) -> bool {
     (0x30..=0x39).contains(&vk)
         || (0x41..=0x5A).contains(&vk)
         || (VK_F1.0 as u32..=VK_F24.0 as u32).contains(&vk)
-        || [VK_SPACE.0, VK_OEM_PERIOD.0, VK_OEM_COMMA.0, VK_OEM_MINUS.0, VK_OEM_PLUS.0].contains(&(vk as u16))
+        || [
+            VK_SPACE.0,
+            VK_OEM_PERIOD.0,
+            VK_OEM_COMMA.0,
+            VK_OEM_MINUS.0,
+            VK_OEM_PLUS.0,
+        ]
+        .contains(&(vk as u16))
 }
 
 fn exe_path() -> PathBuf {
     std::env::current_exe().unwrap_or_default()
 }
 fn exe_dir() -> PathBuf {
-    exe_path().parent().map(|p| p.to_path_buf()).unwrap_or_else(|| PathBuf::from("."))
+    exe_path()
+        .parent()
+        .map(|p| p.to_path_buf())
+        .unwrap_or_else(|| PathBuf::from("."))
 }
 fn appdata_dir() -> PathBuf {
     match std::env::var("APPDATA") {
@@ -62,7 +77,9 @@ impl Store {
         let local = exe_dir().join(INI_NAME);
         let roam = appdata_dir().join(INI_NAME);
         let path = if !local.exists() && roam.exists() { roam } else { local };
-        let ini = std::fs::read_to_string(&path).map(|t| Ini::parse(&t)).unwrap_or_default();
+        let ini = std::fs::read_to_string(&path)
+            .map(|t| Ini::parse(&t))
+            .unwrap_or_default();
         Store { ini, path }
     }
 
@@ -87,10 +104,16 @@ impl Store {
         let d = Settings::default();
         let i = &self.ini;
         let mut s = Settings {
-            mods: i.get_i32("Settings", "HotkeyMods").map(|v| v as u32 & MODS_MASK).unwrap_or(d.mods),
+            mods: i
+                .get_i32("Settings", "HotkeyMods")
+                .map(|v| v as u32 & MODS_MASK)
+                .unwrap_or(d.mods),
             vk: i.get_i32("Settings", "HotkeyKey").map(|v| v as u32).unwrap_or(d.vk),
             bg: d.bg,
-            language: i.get("Settings", "Language").filter(|l| *l != "auto" && !l.is_empty()).map(String::from),
+            language: i
+                .get("Settings", "Language")
+                .filter(|l| *l != "auto" && !l.is_empty())
+                .map(String::from),
         };
         if let Some(c) = i.get("Settings", "BackgroundColor") {
             if c.len() == 7 && c.starts_with('#') {
@@ -110,15 +133,33 @@ impl Store {
         let i = &mut self.ini;
         i.set("Settings", "HotkeyMods", s.mods.to_string());
         i.set("Settings", "HotkeyKey", s.vk.to_string());
-        i.set("Settings", "BackgroundColor", format!("#{:02X}{:02X}{:02X}", cr_r(s.bg), cr_g(s.bg), cr_b(s.bg)));
-        i.set("Settings", "Language", s.language.clone().unwrap_or_else(|| "auto".into()));
+        i.set(
+            "Settings",
+            "BackgroundColor",
+            format!("#{:02X}{:02X}{:02X}", cr_r(s.bg), cr_g(s.bg), cr_b(s.bg)),
+        );
+        i.set(
+            "Settings",
+            "Language",
+            s.language.clone().unwrap_or_else(|| "auto".into()),
+        );
     }
 
     pub fn manual_hosts(&self) -> Vec<String> {
-        self.ini.entries("Hosts").into_iter().map(|(_, v)| v).filter(|v| !v.is_empty()).collect()
+        self.ini
+            .entries("Hosts")
+            .into_iter()
+            .map(|(_, v)| v)
+            .filter(|v| !v.is_empty())
+            .collect()
     }
     pub fn hidden_hosts(&self) -> Vec<String> {
-        self.ini.entries("Hidden").into_iter().map(|(_, v)| v).filter(|v| !v.is_empty()).collect()
+        self.ini
+            .entries("Hidden")
+            .into_iter()
+            .map(|(_, v)| v)
+            .filter(|v| !v.is_empty())
+            .collect()
     }
 
     /// Applies stored usage counters to the model.
@@ -134,9 +175,19 @@ impl Store {
 
     /// Writes hosts, hidden hosts and usage from the model.
     pub fn put_hosts(&mut self, m: &Model) {
-        let hosts = m.manual_targets().into_iter().enumerate().map(|(i, t)| ((i + 1).to_string(), t)).collect();
+        let hosts = m
+            .manual_targets()
+            .into_iter()
+            .enumerate()
+            .map(|(i, t)| ((i + 1).to_string(), t))
+            .collect();
         self.ini.set_section("Hosts", hosts);
-        let hidden = m.hidden.iter().enumerate().map(|(i, t)| ((i + 1).to_string(), t.clone())).collect();
+        let hidden = m
+            .hidden
+            .iter()
+            .enumerate()
+            .map(|(i, t)| ((i + 1).to_string(), t.clone()))
+            .collect();
         self.ini.set_section("Hidden", hidden);
         let usage = m
             .hosts

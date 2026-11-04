@@ -137,7 +137,11 @@ pub fn base64(data: &[u8]) -> String {
         let n = (b[0] as u32) << 16 | (b[1] as u32) << 8 | b[2] as u32;
         out.push(T[(n >> 18) as usize & 63] as char);
         out.push(T[(n >> 12) as usize & 63] as char);
-        out.push(if c.len() > 1 { T[(n >> 6) as usize & 63] as char } else { '=' });
+        out.push(if c.len() > 1 {
+            T[(n >> 6) as usize & 63] as char
+        } else {
+            '='
+        });
         out.push(if c.len() > 2 { T[n as usize & 63] as char } else { '=' });
     }
     out
@@ -157,20 +161,35 @@ mod tests {
 
     #[test]
     fn batches() {
-        let parts: Vec<String> = (0..2000).map(|i| tab_cmd("user@a-rather-long-host.example.com", &format!("s{i}"))).collect();
+        let parts: Vec<String> = (0..2000)
+            .map(|i| tab_cmd("user@a-rather-long-host.example.com", &format!("s{i}")))
+            .collect();
         let b = split_batches(&parts);
         assert!(b.len() > 1);
         assert_eq!(b.iter().map(|x| x.len()).sum::<usize>(), 2000);
         for batch in &b {
             assert!("wt.exe ".len() + batch.join(" ; ").len() <= MAX_CMD_LEN);
         }
-        assert_eq!(single_window_args(&[("h".into(), "a".into()), ("g".into(), "b".into())]).len(), 1);
+        assert_eq!(
+            single_window_args(&[("h".into(), "a".into()), ("g".into(), "b".into())]).len(),
+            1
+        );
     }
 
     #[test]
     fn per_host() {
-        let g = group_by_host(&[("h".into(), "a".into()), ("g".into(), "b".into()), ("h".into(), "c".into())]);
-        assert_eq!(g, vec![("h".to_string(), vec!["a".to_string(), "c".to_string()]), ("g".to_string(), vec!["b".to_string()])]);
+        let g = group_by_host(&[
+            ("h".into(), "a".into()),
+            ("g".into(), "b".into()),
+            ("h".into(), "c".into()),
+        ]);
+        assert_eq!(
+            g,
+            vec![
+                ("h".to_string(), vec!["a".to_string(), "c".to_string()]),
+                ("g".to_string(), vec!["b".to_string()])
+            ]
+        );
         let a = per_host_args(&g);
         assert_eq!(a.len(), 2);
         assert!(a[0].contains(" ; "));

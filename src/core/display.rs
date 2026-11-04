@@ -34,7 +34,11 @@ pub fn compute(names: &[String], max_width: Option<usize>) -> (Vec<String>, usiz
         max_full = max_full.max(len(n));
         has_domain |= !d.is_empty();
     }
-    let min_required = if has_domain { max_prefix + 1 + MIN_DOMAIN_CHARS } else { max_prefix };
+    let min_required = if has_domain {
+        max_prefix + 1 + MIN_DOMAIN_CHARS
+    } else {
+        max_prefix
+    };
     let width = match max_width {
         None => max_full,
         Some(m) if max_full <= m => max_full,
@@ -42,7 +46,13 @@ pub fn compute(names: &[String], max_width: Option<usize>) -> (Vec<String>, usiz
     };
     let out = names
         .iter()
-        .map(|n| if len(n) <= width { n.clone() } else { n.chars().take(width).collect() })
+        .map(|n| {
+            if len(n) <= width {
+                n.clone()
+            } else {
+                n.chars().take(width).collect()
+            }
+        })
         .collect();
     (out, width)
 }
@@ -61,7 +71,11 @@ mod tests {
 
     #[test]
     fn truncation() {
-        let names = vec!["root@dev-server.example.com".to_string(), "jsp@build.corp.example.com".to_string(), "admin@ci.lo".to_string()];
+        let names = vec![
+            "root@dev-server.example.com".to_string(),
+            "jsp@build.corp.example.com".to_string(),
+            "admin@ci.lo".to_string(),
+        ];
         let (all, w) = compute(&names, None);
         assert_eq!(w, 27);
         assert_eq!(all[2], "admin@ci.lo");

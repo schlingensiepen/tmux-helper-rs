@@ -14,7 +14,12 @@ pub struct Item {
 }
 
 const fn it(key: &'static str, name: &'static str, help: &'static str, action: Action) -> Item {
-    Item { key, name, help, action }
+    Item {
+        key,
+        name,
+        help,
+        action,
+    }
 }
 
 const GLOBAL: &[Item] = &[
@@ -31,43 +36,108 @@ const GLOBAL: &[Item] = &[
 ];
 
 const DEL: Item = it("Del", "Delete host", "Removes the selected host after a confirmation. A host from your SSH config is only hidden in the app; the config file is not changed.", Action::DeleteHost);
-const TOGGLE: Item = it("t", "Toggle", "Selects or deselects the highlighted entry.", Action::Toggle);
+const TOGGLE: Item = it(
+    "t",
+    "Toggle",
+    "Selects or deselects the highlighted entry.",
+    Action::Toggle,
+);
 const TOGGLE_ALL: Item = it("a", "Toggle All", "Selects all visible entries, or deselects them if all are selected already. Entries hidden by the filter stay as they are.", Action::ToggleAll);
-const INVERT: Item = it("i", "Invert", "Inverts the selection of the visible entries.", Action::Invert);
+const INVERT: Item = it(
+    "i",
+    "Invert",
+    "Inverts the selection of the visible entries.",
+    Action::Invert,
+);
 
 pub fn items(view: View) -> Vec<Item> {
     let mut v: Vec<Item> = Vec::new();
     match view {
-        View::NewHost => v.push(it("Enter", "Add host", "Adds the typed SSH target to the list and connects to it in the background.", Action::AddHost)),
+        View::NewHost => v.push(it(
+            "Enter",
+            "Add host",
+            "Adds the typed SSH target to the list and connects to it in the background.",
+            Action::AddHost,
+        )),
         View::Pending => v.push(DEL),
         View::Failed => {
-            v.push(it("r", "Reconnect", "Tries to connect to the host again.", Action::Reload));
+            v.push(it(
+                "r",
+                "Reconnect",
+                "Tries to connect to the host again.",
+                Action::Reload,
+            ));
             v.push(it("s", "Set up host", "Opens an interactive Windows Terminal window that copies your public SSH key to the host. You type the password once; afterwards the host connects without a password.", Action::SetupHost));
             v.push(DEL);
         }
         View::Connected => {
             v.extend([TOGGLE, TOGGLE_ALL, INVERT]);
-            v.push(it("j", "Jump start", "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is.", Action::JumpStart));
-            v.push(it("r", "Reload", "Fetches the session list from the host again.", Action::Reload));
+            v.push(it(
+                "j",
+                "Jump start",
+                "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is.",
+                Action::JumpStart,
+            ));
+            v.push(it(
+                "r",
+                "Reload",
+                "Fetches the session list from the host again.",
+                Action::Reload,
+            ));
             v.push(it("Ctrl+Enter", "Direct start", "Creates the sessions typed in the field below on this host and opens them at once in one Windows Terminal window. Existing sessions with the same name are attached.", Action::DirectStart));
             v.push(DEL);
         }
         View::Open => {
             v.push(it("e", "One WT", "Opens all selected sessions, and creates the new ones, in a single Windows Terminal window. Afterwards the selection is cleared.", Action::OneWindow));
-            v.push(it("p", "Per host", "Like One WT, but with one Windows Terminal window per host.", Action::PerHost));
+            v.push(it(
+                "p",
+                "Per host",
+                "Like One WT, but with one Windows Terminal window per host.",
+                Action::PerHost,
+            ));
         }
         View::Direct => {
             v.extend([TOGGLE, TOGGLE_ALL, INVERT]);
             v.push(it("j", "Execute", "Creates the missing sessions on the selected hosts and opens all of them in one Windows Terminal window. Selection and names stay, so you can run it again.", Action::Execute));
-            v.push(it("p", "Per host", "Like Execute, but with one Windows Terminal window per host.", Action::PerHost));
+            v.push(it(
+                "p",
+                "Per host",
+                "Like Execute, but with one Windows Terminal window per host.",
+                Action::PerHost,
+            ));
         }
         View::ShowAll => {
             v.extend([TOGGLE, TOGGLE_ALL, INVERT]);
-            v.push(it("j", "Jump start", "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is.", Action::JumpStart));
-            v.push(it("e", "One WT", "Opens all selected sessions in a single Windows Terminal window. The selection stays.", Action::OneWindow));
-            v.push(it("p", "Per host", "Opens the selected sessions with one Windows Terminal window per host. The selection stays.", Action::PerHost));
-            v.push(it("h", "Sort by host", "Sorts the table by host. Press again to reverse the order.", Action::SortHost));
-            v.push(it("s", "Sort by session", "Sorts the table by session name. Press again to reverse the order.", Action::SortSession));
+            v.push(it(
+                "j",
+                "Jump start",
+                "Opens the highlighted session immediately in a Windows Terminal tab. The selection stays as it is.",
+                Action::JumpStart,
+            ));
+            v.push(it(
+                "e",
+                "One WT",
+                "Opens all selected sessions in a single Windows Terminal window. The selection stays.",
+                Action::OneWindow,
+            ));
+            v.push(it(
+                "p",
+                "Per host",
+                "Opens the selected sessions with one Windows Terminal window per host. The selection stays.",
+                Action::PerHost,
+            ));
+            v.push(it(
+                "h",
+                "Sort by host",
+                "Sorts the table by host. Press again to reverse the order.",
+                Action::SortHost,
+            ));
+            v.push(it(
+                "s",
+                "Sort by session",
+                "Sorts the table by session name. Press again to reverse the order.",
+                Action::SortSession,
+            ));
         }
     }
     v.extend_from_slice(GLOBAL);
@@ -76,7 +146,9 @@ pub fn items(view: View) -> Vec<Item> {
 
 /// Key label as shown (Ctrl/Enter/Del are translated).
 pub fn key_label(key: &str) -> String {
-    key.replace("Ctrl", &tr("Ctrl")).replace("Enter", &tr("Enter")).replace("Del", &tr("Del"))
+    key.replace("Ctrl", &tr("Ctrl"))
+        .replace("Enter", &tr("Enter"))
+        .replace("Del", &tr("Del"))
 }
 
 /// Text of the overlay for one entry.

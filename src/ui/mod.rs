@@ -168,8 +168,17 @@ unsafe fn create_fonts() {
             let _ = DeleteObject(f.into());
         }
     }
-    let mut ncm = NONCLIENTMETRICSW { cbSize: size_of::<NONCLIENTMETRICSW>() as u32, ..Default::default() };
-    let _ = SystemParametersInfoForDpi(SPI_GETNONCLIENTMETRICS.0, ncm.cbSize, Some(&mut ncm as *mut _ as *mut c_void), 0, stt.dpi);
+    let mut ncm = NONCLIENTMETRICSW {
+        cbSize: size_of::<NONCLIENTMETRICSW>() as u32,
+        ..Default::default()
+    };
+    let _ = SystemParametersInfoForDpi(
+        SPI_GETNONCLIENTMETRICS.0,
+        ncm.cbSize,
+        Some(&mut ncm as *mut _ as *mut c_void),
+        0,
+        stt.dpi,
+    );
     let mut lf = ncm.lfMessageFont;
     stt.font = CreateFontIndirectW(&lf);
     lf.lfWeight = FW_SEMIBOLD.0 as i32;
@@ -197,7 +206,12 @@ unsafe fn apply_theme() {
     stt.br_field = CreateSolidBrush(stt.th.field);
     if !stt.main.is_invalid() {
         let dark = BOOL::from(stt.th.dark);
-        let _ = DwmSetWindowAttribute(stt.main, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark as *const _ as *const c_void, size_of::<BOOL>() as u32);
+        let _ = DwmSetWindowAttribute(
+            stt.main,
+            DWMWA_USE_IMMERSIVE_DARK_MODE,
+            &dark as *const _ as *const c_void,
+            size_of::<BOOL>() as u32,
+        );
     }
 }
 
@@ -270,8 +284,16 @@ unsafe fn load_config_hosts() -> Vec<String> {
 /// to all hosts.
 unsafe fn reload_hosts() {
     let config = load_config_hosts();
-    let manual = if st().model.hosts.is_empty() { st().store.manual_hosts() } else { st().model.manual_targets() };
-    let hidden = if st().model.hosts.is_empty() { st().store.hidden_hosts() } else { st().model.hidden.clone() };
+    let manual = if st().model.hosts.is_empty() {
+        st().store.manual_hosts()
+    } else {
+        st().model.manual_targets()
+    };
+    let hidden = if st().model.hosts.is_empty() {
+        st().store.hidden_hosts()
+    } else {
+        st().model.hidden.clone()
+    };
     st().model.load_hosts(&config, &manual, &hidden);
     let stt = st();
     stt.store.apply_usage(&mut stt.model);
@@ -301,8 +323,14 @@ unsafe fn save_store() {
 unsafe fn handle_events() {
     for e in worker::drain() {
         match e {
-            worker::Event::Connected { target, generation, result } => {
-                let Some(h) = st().model.host_mut(&target) else { continue };
+            worker::Event::Connected {
+                target,
+                generation,
+                result,
+            } => {
+                let Some(h) = st().model.host_mut(&target) else {
+                    continue;
+                };
                 if h.generation != generation {
                     continue;
                 }
@@ -356,7 +384,11 @@ unsafe fn handle_events() {
                     let mut title = tr("Error");
                     let mut parts = Vec::new();
                     for (t, msg) in &r.errors {
-                        let name = st().model.host(t).map(|h| h.display.clone()).unwrap_or_else(|| t.clone());
+                        let name = st()
+                            .model
+                            .host(t)
+                            .map(|h| h.display.clone())
+                            .unwrap_or_else(|| t.clone());
                         if r.errors.len() == 1 && !t.is_empty() {
                             title = trf("Error on {name}", &[("name", &name)]);
                             parts.push(msg.clone());
@@ -380,7 +412,13 @@ unsafe fn do_open_all() {
     let open = st().model.all_detected();
     let targets: Vec<String> = open.iter().map(|(t, _)| t.clone()).collect();
     st().model.reset_hosts(&targets);
-    worker::launch(worker::LaunchJob { reconnect: vec![], create: vec![], open, single_window: false, refresh: targets });
+    worker::launch(worker::LaunchJob {
+        reconnect: vec![],
+        create: vec![],
+        open,
+        single_window: false,
+        refresh: targets,
+    });
     views::refresh_view_data(None);
 }
 
@@ -389,7 +427,13 @@ unsafe fn launch_pairs(pairs: Vec<(String, String)>, single: bool) {
         return;
     }
     let open = crate::core::wt::group_by_host(&pairs);
-    worker::launch(worker::LaunchJob { reconnect: vec![], create: vec![], open, single_window: single, refresh: vec![] });
+    worker::launch(worker::LaunchJob {
+        reconnect: vec![],
+        create: vec![],
+        open,
+        single_window: single,
+        refresh: vec![],
+    });
 }
 
 unsafe fn open_selection(single: bool) {
@@ -398,7 +442,11 @@ unsafe fn open_selection(single: bool) {
         return;
     }
     let targets: Vec<String> = entries.iter().map(|e| e.target.clone()).collect();
-    let create = entries.iter().filter(|e| !e.new.is_empty()).map(|e| (e.target.clone(), e.new.clone())).collect();
+    let create = entries
+        .iter()
+        .filter(|e| !e.new.is_empty())
+        .map(|e| (e.target.clone(), e.new.clone()))
+        .collect();
     let open = entries
         .iter()
         .map(|e| {
@@ -408,7 +456,13 @@ unsafe fn open_selection(single: bool) {
         })
         .collect();
     st().model.reset_hosts(&targets);
-    worker::launch(worker::LaunchJob { reconnect: vec![], create, open, single_window: single, refresh: targets });
+    worker::launch(worker::LaunchJob {
+        reconnect: vec![],
+        create,
+        open,
+        single_window: single,
+        refresh: targets,
+    });
     views::refresh_view_data(None);
 }
 
@@ -437,7 +491,13 @@ unsafe fn execute_direct(single: bool) {
         .filter(|t| st().model.host(t).map(|h| h.status == Status::Failed).unwrap_or(false))
         .cloned()
         .collect();
-    worker::launch(worker::LaunchJob { reconnect, create, open, single_window: single, refresh: targets });
+    worker::launch(worker::LaunchJob {
+        reconnect,
+        create,
+        open,
+        single_window: single,
+        refresh: targets,
+    });
 }
 
 unsafe fn direct_start() {
@@ -481,7 +541,10 @@ unsafe fn delete_host() {
     let Some(t) = selected_host() else { return };
     let Some(h) = st().model.host(&t) else { return };
     let q = if h.source == Source::Config {
-        trf("Hide host '{name}'? It stays in your SSH config file; add it again with \"New host\".", &[("name", &h.display)])
+        trf(
+            "Hide host '{name}'? It stays in your SSH config file; add it again with \"New host\".",
+            &[("name", &h.display)],
+        )
     } else {
         trf("Delete host '{name}'?", &[("name", &h.display)])
     };
@@ -559,7 +622,11 @@ pub unsafe fn perform(a: Action) {
             }
         }
         Action::SortHost | Action::SortSession => {
-            st().model.sort_all(if a == Action::SortHost { SortKey::Host } else { SortKey::Session });
+            st().model.sort_all(if a == Action::SortHost {
+                SortKey::Host
+            } else {
+                SortKey::Session
+            });
             views::refresh_view_data(None);
         }
         Action::Filter => views::focus_filter(),
@@ -671,7 +738,9 @@ unsafe fn pre_translate(msg: &MSG) -> bool {
             if is_edit(focus) || key_down(VK_CONTROL) {
                 return false;
             }
-            let Some(c) = char::from_u32(msg.wParam.0 as u32) else { return false };
+            let Some(c) = char::from_u32(msg.wParam.0 as u32) else {
+                return false;
+            };
             match char_action(c.to_ascii_lowercase(), st().view) {
                 Some(a) if c.is_ascii_lowercase() || !c.is_ascii_alphabetic() => {
                     perform(a);
@@ -791,7 +860,16 @@ unsafe fn tray_menu() {
     let _ = SetMenuDefaultItem(m, IDM_OPEN as u32, 0);
     let h = st().main;
     let _ = SetForegroundWindow(h);
-    let cmd = TrackPopupMenu(m, TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_NONOTIFY, pt.x, pt.y, None, h, None).0 as usize;
+    let cmd = TrackPopupMenu(
+        m,
+        TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_NONOTIFY,
+        pt.x,
+        pt.y,
+        None,
+        h,
+        None,
+    )
+    .0 as usize;
     post(h, WM_NULL, 0, 0);
     let _ = DestroyMenu(m);
     match cmd {
@@ -909,7 +987,11 @@ unsafe extern "system" fn main_proc(h: HWND, m: u32, wp: WPARAM, lp: LPARAM) -> 
                 let _ = GetCursorPos(&mut pt);
                 let _ = ScreenToClient(h, &mut pt);
                 if let Some(i) = splitter_at(pt.x, pt.y).or(st().drag.map(|d| d.0)) {
-                    let id = if st().splitters[i].vertical { IDC_SIZEWE } else { IDC_SIZENS };
+                    let id = if st().splitters[i].vertical {
+                        IDC_SIZEWE
+                    } else {
+                        IDC_SIZENS
+                    };
                     SetCursor(LoadCursorW(None, id).ok());
                     return LRESULT(1);
                 }
@@ -948,7 +1030,12 @@ unsafe extern "system" fn main_proc(h: HWND, m: u32, wp: WPARAM, lp: LPARAM) -> 
                 }
                 if hit.is_some() {
                     SetTimer(Some(h), TIMER_HOVER, 400, None);
-                    let mut tme = TRACKMOUSEEVENT { cbSize: size_of::<TRACKMOUSEEVENT>() as u32, dwFlags: TME_LEAVE, hwndTrack: h, dwHoverTime: 0 };
+                    let mut tme = TRACKMOUSEEVENT {
+                        cbSize: size_of::<TRACKMOUSEEVENT>() as u32,
+                        dwFlags: TME_LEAVE,
+                        hwndTrack: h,
+                        dwHoverTime: 0,
+                    };
                     let _ = TrackMouseEvent(&mut tme);
                 }
             }
@@ -983,7 +1070,15 @@ unsafe extern "system" fn main_proc(h: HWND, m: u32, wp: WPARAM, lp: LPARAM) -> 
         WM_DPICHANGED => {
             st().dpi = hiword(wp.0);
             let r = &*(lp.0 as *const RECT);
-            let _ = SetWindowPos(h, None, r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_NOZORDER | SWP_NOACTIVATE);
+            let _ = SetWindowPos(
+                h,
+                None,
+                r.left,
+                r.top,
+                r.right - r.left,
+                r.bottom - r.top,
+                SWP_NOZORDER | SWP_NOACTIVATE,
+            );
             create_fonts();
             views::apply_fonts();
             views::layout();
@@ -1029,14 +1124,25 @@ pub unsafe fn preferred_languages() -> Vec<String> {
     let mut num = 0u32;
     let mut len = 0u32;
     let flags = windows::Win32::Globalization::MUI_LANGUAGE_NAME;
-    if windows::Win32::Globalization::GetUserPreferredUILanguages(flags, &mut num, None, &mut len).is_err() || len == 0 {
+    if windows::Win32::Globalization::GetUserPreferredUILanguages(flags, &mut num, None, &mut len).is_err() || len == 0
+    {
         return Vec::new();
     }
     let mut buf = vec![0u16; len as usize];
-    if windows::Win32::Globalization::GetUserPreferredUILanguages(flags, &mut num, Some(windows::core::PWSTR(buf.as_mut_ptr())), &mut len).is_err() {
+    if windows::Win32::Globalization::GetUserPreferredUILanguages(
+        flags,
+        &mut num,
+        Some(windows::core::PWSTR(buf.as_mut_ptr())),
+        &mut len,
+    )
+    .is_err()
+    {
         return Vec::new();
     }
-    buf.split(|&c| c == 0).filter(|p| !p.is_empty()).map(String::from_utf16_lossy).collect()
+    buf.split(|&c| c == 0)
+        .filter(|p| !p.is_empty())
+        .map(String::from_utf16_lossy)
+        .collect()
 }
 
 pub unsafe fn apply_language() {
@@ -1083,7 +1189,11 @@ unsafe fn run_inner() {
             let mut pid = 0u32;
             GetWindowThreadProcessId(other, Some(&mut pid));
             let _ = AllowSetForegroundWindow(pid);
-            let msg = if arg_present("--settings") { WM_APP_SETTINGS } else { WM_APP_SHOW };
+            let msg = if arg_present("--settings") {
+                WM_APP_SETTINGS
+            } else {
+                WM_APP_SHOW
+            };
             post(other, msg, 0, 0);
         }
         return;
@@ -1142,9 +1252,16 @@ unsafe fn run_inner() {
         }
     }
 
-    let big_icon = LoadImageW(Some(inst), PCWSTR(std::ptr::without_provenance(1)), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)
-        .map(|h| HICON(h.0))
-        .unwrap_or_default();
+    let big_icon = LoadImageW(
+        Some(inst),
+        PCWSTR(std::ptr::without_provenance(1)),
+        IMAGE_ICON,
+        0,
+        0,
+        LR_DEFAULTSIZE,
+    )
+    .map(|h| HICON(h.0))
+    .unwrap_or_default();
     let cursor = LoadCursorW(None, IDC_ARROW).unwrap_or_default();
     let wc = WNDCLASSEXW {
         cbSize: size_of::<WNDCLASSEXW>() as u32,
@@ -1159,7 +1276,11 @@ unsafe fn run_inner() {
     dialogs::register_classes(inst, big_icon, cursor);
     st().msg_taskbar_created = RegisterWindowMessageW(w!("TaskbarCreated"));
 
-    let ex = if i18n::is_rtl() { WS_EX_LAYOUTRTL | WS_EX_CONTROLPARENT } else { WS_EX_CONTROLPARENT };
+    let ex = if i18n::is_rtl() {
+        WS_EX_LAYOUTRTL | WS_EX_CONTROLPARENT
+    } else {
+        WS_EX_CONTROLPARENT
+    };
     let Ok(main) = CreateWindowExW(
         ex,
         MAIN_CLASS,
@@ -1187,7 +1308,11 @@ unsafe fn run_inner() {
     views::create_controls();
 
     reload_hosts();
-    st().sel = if st().model.hosts.is_empty() { Entry::NewHost } else { Entry::Open };
+    st().sel = if st().model.hosts.is_empty() {
+        Entry::NewHost
+    } else {
+        Entry::Open
+    };
     views::refresh_host_list();
     views::show_view();
 
@@ -1206,7 +1331,10 @@ unsafe fn run_inner() {
         show_main();
         dialogs::show_settings(false);
     } else if st().hotkey_ok && !autostart {
-        let txt = trf("Press {hotkey} to show or hide the window.", &[("hotkey", &store::hotkey_text(set.mods, set.vk))]);
+        let txt = trf(
+            "Press {hotkey} to show or hide the window.",
+            &[("hotkey", &store::hotkey_text(set.mods, set.vk))],
+        );
         balloon(&trf("{app} is running", &[("app", APP_NAME)]), &txt);
     }
     if !st().hotkey_ok {

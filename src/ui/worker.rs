@@ -19,8 +19,15 @@ const SSH_TIMEOUT: Duration = Duration::from_secs(120);
 const RESOLVE_TIMEOUT: Duration = Duration::from_secs(10);
 
 pub enum Event {
-    Connected { target: String, generation: u64, result: Result<Vec<String>, String> },
-    Resolved { target: String, display: String },
+    Connected {
+        target: String,
+        generation: u64,
+        result: Result<Vec<String>, String>,
+    },
+    Resolved {
+        target: String,
+        display: String,
+    },
     JobDone(JobResult),
 }
 
@@ -68,7 +75,13 @@ fn run(program: &str, args: &[&str], timeout: Duration) -> Result<(i32, String, 
         .stderr(Stdio::piped())
         .creation_flags(CREATE_NO_WINDOW)
         .spawn()
-        .map_err(|e| if e.kind() == std::io::ErrorKind::NotFound { RunError::NotFound } else { RunError::Other(e.to_string()) })?;
+        .map_err(|e| {
+            if e.kind() == std::io::ErrorKind::NotFound {
+                RunError::NotFound
+            } else {
+                RunError::Other(e.to_string())
+            }
+        })?;
     let mut so = child.stdout.take().unwrap();
     let mut se = child.stderr.take().unwrap();
     let t_out = std::thread::spawn(move || {
@@ -94,8 +107,12 @@ fn run(program: &str, args: &[&str], timeout: Duration) -> Result<(i32, String, 
             Err(e) => return Err(RunError::Other(e.to_string())),
         }
     };
-    let out = String::from_utf8_lossy(&t_out.join().unwrap_or_default()).trim().to_string();
-    let err = String::from_utf8_lossy(&t_err.join().unwrap_or_default()).trim().to_string();
+    let out = String::from_utf8_lossy(&t_out.join().unwrap_or_default())
+        .trim()
+        .to_string();
+    let err = String::from_utf8_lossy(&t_err.join().unwrap_or_default())
+        .trim()
+        .to_string();
     Ok((code, out, err))
 }
 
@@ -123,7 +140,11 @@ fn ssh(target: &str, script: &str) -> Result<protocol::Output, String> {
 pub fn connect(target: String, generation: u64) {
     std::thread::spawn(move || {
         let result = ssh(&target, &protocol::connect_script()).map(|o| o.sessions);
-        push(Event::Connected { target, generation, result });
+        push(Event::Connected {
+            target,
+            generation,
+            result,
+        });
     });
 }
 
@@ -165,7 +186,10 @@ pub struct LaunchJob {
 
 pub fn launch(job: LaunchJob) {
     std::thread::spawn(move || {
-        let mut res = JobResult { refresh: job.refresh.clone(), ..Default::default() };
+        let mut res = JobResult {
+            refresh: job.refresh.clone(),
+            ..Default::default()
+        };
         let mut failed: Vec<String> = Vec::new();
         for t in &job.reconnect {
             if let Err(e) = ssh(t, &protocol::connect_script()) {
@@ -185,11 +209,16 @@ pub fn launch(job: LaunchJob) {
                 res.refresh.push(t.clone());
             }
         }
-        let open: Vec<(String, Vec<String>)> =
-            job.open.into_iter().filter(|(t, s)| !failed.contains(t) && !s.is_empty()).collect();
+        let open: Vec<(String, Vec<String>)> = job
+            .open
+            .into_iter()
+            .filter(|(t, s)| !failed.contains(t) && !s.is_empty())
+            .collect();
         let args = if job.single_window {
-            let pairs: Vec<(String, String)> =
-                open.iter().flat_map(|(t, ss)| ss.iter().map(move |s| (t.clone(), s.clone()))).collect();
+            let pairs: Vec<(String, String)> = open
+                .iter()
+                .flat_map(|(t, ss)| ss.iter().map(move |s| (t.clone(), s.clone())))
+                .collect();
             wt::single_window_args(&pairs)
         } else {
             wt::per_host_args(&open)

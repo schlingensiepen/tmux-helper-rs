@@ -61,7 +61,11 @@ impl Ini {
 
     pub fn get(&self, section: &str, key: &str) -> Option<&str> {
         let i = self.section_index(section)?;
-        self.sections[i].1.iter().find(|(k, _)| k.eq_ignore_ascii_case(key)).map(|(_, v)| v.as_str())
+        self.sections[i]
+            .1
+            .iter()
+            .find(|(k, _)| k.eq_ignore_ascii_case(key))
+            .map(|(_, v)| v.as_str())
     }
 
     pub fn get_i32(&self, section: &str, key: &str) -> Option<i32> {
@@ -86,7 +90,9 @@ impl Ini {
 
     /// All (key, value) pairs of a section, in file order.
     pub fn entries(&self, section: &str) -> Vec<(String, String)> {
-        self.section_index(section).map(|i| self.sections[i].1.clone()).unwrap_or_default()
+        self.section_index(section)
+            .map(|i| self.sections[i].1.clone())
+            .unwrap_or_default()
     }
 
     /// Replaces a whole section (used for lists such as `Hosts`).
@@ -102,7 +108,8 @@ mod tests {
 
     #[test]
     fn roundtrip() {
-        let mut ini = Ini::parse("\u{feff}; comment\n[Settings]\nHotkeyKey = 84\nLanguage=de\n\n[Splits]\nhost:root@x=400,700\n");
+        let mut ini =
+            Ini::parse("\u{feff}; comment\n[Settings]\nHotkeyKey = 84\nLanguage=de\n\n[Splits]\nhost:root@x=400,700\n");
         assert_eq!(ini.get("settings", "hotkeykey"), Some("84"));
         assert_eq!(ini.get_i32("Settings", "HotkeyKey"), Some(84));
         assert_eq!(ini.get("Splits", "host:root@x"), Some("400,700"));

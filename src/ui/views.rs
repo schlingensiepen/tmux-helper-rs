@@ -101,18 +101,58 @@ pub struct Controls {
 impl Controls {
     fn all(&self) -> Vec<HWND> {
         vec![
-            self.host_filter, self.host_list, self.lbl_new, self.ed_new, self.btn_add, self.lbl_info, self.ed_error,
-            self.btn_reconnect, self.btn_setup, self.btn_del, self.lbl_sessions, self.sess_filter, self.sess_list,
-            self.btn_reload, self.lbl_newsess, self.ed_newsess, self.btn_direct, self.lbl_validation, self.btn_all,
-            self.lbl_summary, self.ed_summary, self.btn_one, self.btn_per, self.lbl_targets, self.dir_filter,
-            self.dir_list, self.lbl_names, self.ed_names, self.lbl_dir_validation, self.ed_dir_summary,
-            self.btn_dir_one, self.btn_dir_per, self.all_filter, self.all_list, self.btn_all_one, self.btn_all_per,
+            self.host_filter,
+            self.host_list,
+            self.lbl_new,
+            self.ed_new,
+            self.btn_add,
+            self.lbl_info,
+            self.ed_error,
+            self.btn_reconnect,
+            self.btn_setup,
+            self.btn_del,
+            self.lbl_sessions,
+            self.sess_filter,
+            self.sess_list,
+            self.btn_reload,
+            self.lbl_newsess,
+            self.ed_newsess,
+            self.btn_direct,
+            self.lbl_validation,
+            self.btn_all,
+            self.lbl_summary,
+            self.ed_summary,
+            self.btn_one,
+            self.btn_per,
+            self.lbl_targets,
+            self.dir_filter,
+            self.dir_list,
+            self.lbl_names,
+            self.ed_names,
+            self.lbl_dir_validation,
+            self.ed_dir_summary,
+            self.btn_dir_one,
+            self.btn_dir_per,
+            self.all_filter,
+            self.all_list,
+            self.btn_all_one,
+            self.btn_all_per,
         ]
     }
     fn buttons(&self) -> Vec<HWND> {
         vec![
-            self.btn_add, self.btn_reconnect, self.btn_setup, self.btn_del, self.btn_reload, self.btn_direct,
-            self.btn_all, self.btn_one, self.btn_per, self.btn_dir_one, self.btn_dir_per, self.btn_all_one,
+            self.btn_add,
+            self.btn_reconnect,
+            self.btn_setup,
+            self.btn_del,
+            self.btn_reload,
+            self.btn_direct,
+            self.btn_all,
+            self.btn_one,
+            self.btn_per,
+            self.btn_dir_one,
+            self.btn_dir_per,
+            self.btn_all_one,
             self.btn_all_per,
         ]
     }
@@ -166,7 +206,12 @@ unsafe fn mk_edit(id: i32, multiline: bool, readonly: bool) -> HWND {
         style &= !WS_TABSTOP.0;
     }
     let h = mk(w!("EDIT"), "", style, WS_EX_CLIENTEDGE.0, id);
-    send(h, EM_SETMARGINS, (EC_LEFTMARGIN | EC_RIGHTMARGIN) as usize, (s(4) | s(4) << 16) as isize);
+    send(
+        h,
+        EM_SETMARGINS,
+        (EC_LEFTMARGIN | EC_RIGHTMARGIN) as usize,
+        (s(4) | s(4) << 16) as isize,
+    );
     h
 }
 unsafe fn mk_filter(id: i32) -> HWND {
@@ -183,10 +228,19 @@ unsafe fn mk_listview(id: i32, columns: &[&str]) -> HWND {
     let h = mk(w!("SysListView32"), "", style, WS_EX_CLIENTEDGE.0, id);
     let ex = LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER;
     send(h, LVM_SETEXTENDEDLISTVIEWSTYLE, ex as usize, ex as isize);
-    let cols: Vec<String> = if columns.is_empty() { vec![String::new()] } else { columns.iter().map(|c| tr(c)).collect() };
+    let cols: Vec<String> = if columns.is_empty() {
+        vec![String::new()]
+    } else {
+        columns.iter().map(|c| tr(c)).collect()
+    };
     for (i, c) in cols.iter().enumerate() {
         let mut t = wide(c);
-        let col = LVCOLUMNW { mask: LVCF_TEXT | LVCF_WIDTH, cx: s(200), pszText: windows::core::PWSTR(t.as_mut_ptr()), ..Default::default() };
+        let col = LVCOLUMNW {
+            mask: LVCF_TEXT | LVCF_WIDTH,
+            cx: s(200),
+            pszText: windows::core::PWSTR(t.as_mut_ptr()),
+            ..Default::default()
+        };
         send(h, LVM_INSERTCOLUMNW, i, &col as *const _ as isize);
     }
     h
@@ -275,8 +329,22 @@ pub unsafe fn apply_colors() {
         send(lv, LVM_SETTEXTBKCOLOR, 0, th.field.0 as isize);
         send(lv, LVM_SETTEXTCOLOR, 0, th.text.0 as isize);
     }
-    let theme = if th.dark { w!("DarkMode_Explorer") } else { w!("Explorer") };
-    for h in [st().c.sess_list, st().c.dir_list, st().c.all_list, st().c.host_list, st().c.ed_newsess, st().c.ed_names, st().c.ed_summary, st().c.ed_dir_summary, st().c.ed_error] {
+    let theme = if th.dark {
+        w!("DarkMode_Explorer")
+    } else {
+        w!("Explorer")
+    };
+    for h in [
+        st().c.sess_list,
+        st().c.dir_list,
+        st().c.all_list,
+        st().c.host_list,
+        st().c.ed_newsess,
+        st().c.ed_names,
+        st().c.ed_summary,
+        st().c.ed_dir_summary,
+        st().c.ed_error,
+    ] {
         let _ = SetWindowTheme(h, theme, PCWSTR::null());
     }
     let _ = InvalidateRect(Some(st().main), None, true);
@@ -295,7 +363,10 @@ pub unsafe fn refresh_host_list() {
     }
     let entries = super::build_entries(&st().model);
     let sel = st().sel.clone();
-    let idx = entries.iter().position(|e| *e == sel).unwrap_or_else(|| entries.iter().position(|e| *e == Entry::Open).unwrap_or(0));
+    let idx = entries
+        .iter()
+        .position(|e| *e == sel)
+        .unwrap_or_else(|| entries.iter().position(|e| *e == Entry::Open).unwrap_or(0));
     let same = entries == st().entries;
     st().entries = entries.clone();
     if !same {
@@ -357,13 +428,27 @@ unsafe fn view_controls(v: View) -> Vec<HWND> {
         View::Pending => vec![c.lbl_info, c.btn_del],
         View::Failed => vec![c.lbl_info, c.ed_error, c.btn_reconnect, c.btn_setup, c.btn_del],
         View::Connected => vec![
-            c.lbl_sessions, c.sess_filter, c.sess_list, c.btn_reload, c.btn_del, c.lbl_newsess, c.ed_newsess,
-            c.btn_direct, c.lbl_validation,
+            c.lbl_sessions,
+            c.sess_filter,
+            c.sess_list,
+            c.btn_reload,
+            c.btn_del,
+            c.lbl_newsess,
+            c.ed_newsess,
+            c.btn_direct,
+            c.lbl_validation,
         ],
         View::Open => vec![c.btn_all, c.lbl_summary, c.ed_summary, c.btn_one, c.btn_per],
         View::Direct => vec![
-            c.lbl_targets, c.dir_filter, c.dir_list, c.lbl_names, c.ed_names, c.lbl_dir_validation, c.ed_dir_summary,
-            c.btn_dir_one, c.btn_dir_per,
+            c.lbl_targets,
+            c.dir_filter,
+            c.dir_list,
+            c.lbl_names,
+            c.ed_names,
+            c.lbl_dir_validation,
+            c.ed_dir_summary,
+            c.btn_dir_one,
+            c.btn_dir_per,
         ],
         View::ShowAll => vec![c.all_filter, c.all_list, c.btn_all_one, c.btn_all_per],
     }
@@ -385,7 +470,12 @@ pub unsafe fn show_view() {
     }
     populate();
     layout();
-    if old != new && !focus.is_invalid() && focus != st().c.host_list && focus != st().c.host_filter && !keep.contains(&focus) {
+    if old != new
+        && !focus.is_invalid()
+        && focus != st().c.host_list
+        && focus != st().c.host_filter
+        && !keep.contains(&focus)
+    {
         focus_detail();
     }
     super::hide_help();
@@ -414,7 +504,13 @@ unsafe fn lv_fill(lv: HWND, rows: &[(Vec<String>, bool)], colors_key: bool) {
     }
     for (i, (cols, checked)) in rows.iter().enumerate() {
         let mut t = wide(&cols[0]);
-        let mut item = LVITEMW { mask: LVIF_TEXT, iItem: i as i32, iSubItem: 0, pszText: windows::core::PWSTR(t.as_mut_ptr()), ..Default::default() };
+        let mut item = LVITEMW {
+            mask: LVIF_TEXT,
+            iItem: i as i32,
+            iSubItem: 0,
+            pszText: windows::core::PWSTR(t.as_mut_ptr()),
+            ..Default::default()
+        };
         if count != rows.len() {
             send(lv, LVM_INSERTITEMW, 0, &item as *const _ as isize);
         } else {
@@ -422,18 +518,30 @@ unsafe fn lv_fill(lv: HWND, rows: &[(Vec<String>, bool)], colors_key: bool) {
         }
         for (k, col) in cols.iter().enumerate().skip(1) {
             let mut t = wide(col);
-            let mut sub = LVITEMW { iSubItem: k as i32, pszText: windows::core::PWSTR(t.as_mut_ptr()), ..Default::default() };
+            let mut sub = LVITEMW {
+                iSubItem: k as i32,
+                pszText: windows::core::PWSTR(t.as_mut_ptr()),
+                ..Default::default()
+            };
             send(lv, LVM_SETITEMTEXTW, i, &mut sub as *mut _ as isize);
         }
         let state = if *checked { 2u32 << 12 } else { 1u32 << 12 };
-        let st_item = LVITEMW { stateMask: LVIS_STATEIMAGEMASK, state: LIST_VIEW_ITEM_STATE_FLAGS(state), ..Default::default() };
+        let st_item = LVITEMW {
+            stateMask: LVIS_STATEIMAGEMASK,
+            state: LIST_VIEW_ITEM_STATE_FLAGS(state),
+            ..Default::default()
+        };
         send(lv, LVM_SETITEMSTATE, i, &st_item as *const _ as isize);
     }
     let n = rows.len() as i32;
     if n > 0 {
         let f = if focused >= 0 && focused < n { focused } else { 0 };
         let fs = LIST_VIEW_ITEM_STATE_FLAGS(LVIS_FOCUSED.0 | LVIS_SELECTED.0);
-        let it = LVITEMW { stateMask: fs, state: fs, ..Default::default() };
+        let it = LVITEMW {
+            stateMask: fs,
+            state: fs,
+            ..Default::default()
+        };
         send(lv, LVM_SETITEMSTATE, f as usize, &it as *const _ as isize);
     }
     let _ = colors_key;
@@ -474,7 +582,11 @@ pub unsafe fn populate() {
         }
         View::Failed => {
             let t = c_host.unwrap_or_default();
-            let (d, e) = st().model.host(&t).map(|h| (h.display.clone(), h.error.clone())).unwrap_or_default();
+            let (d, e) = st()
+                .model
+                .host(&t)
+                .map(|h| (h.display.clone(), h.error.clone()))
+                .unwrap_or_default();
             set_text(st().c.lbl_info, &format!("{d}\n{}", tr("Status: connection failed")));
             set_text(st().c.ed_error, &crlf(&e));
         }
@@ -484,7 +596,8 @@ pub unsafe fn populate() {
             set_text(st().c.sess_filter, &h.filter);
             let vis = h.visible_sessions();
             st().c.sess_rows = vis.clone();
-            let rows: Vec<(Vec<String>, bool)> = vis.iter().map(|s| (vec![s.clone()], h.selected.contains(s))).collect();
+            let rows: Vec<(Vec<String>, bool)> =
+                vis.iter().map(|s| (vec![s.clone()], h.selected.contains(s))).collect();
             lv_fill(st().c.sess_list, &rows, false);
             let cur = get_text(st().c.ed_newsess).replace("\r\n", "\n");
             if cur != h.new_text {
@@ -514,7 +627,10 @@ pub unsafe fn populate() {
             if entries.is_empty() {
                 lines.push(tr("(no selection)"));
             } else {
-                lines.push(trf("Total: {total} session(s) on {hosts} host(s)", &[("total", &total.to_string()), ("hosts", &entries.len().to_string())]));
+                lines.push(trf(
+                    "Total: {total} session(s) on {hosts} host(s)",
+                    &[("total", &total.to_string()), ("hosts", &entries.len().to_string())],
+                ));
             }
             set_text(st().c.ed_summary, &crlf(&lines.join("\n")));
             set_btn(st().c.btn_one, !entries.is_empty());
@@ -526,7 +642,12 @@ pub unsafe fn populate() {
             let vis = m.direct_visible();
             let rows: Vec<(Vec<String>, bool)> = vis
                 .iter()
-                .map(|t| (vec![m.host(t).map(|h| h.display.clone()).unwrap_or_default()], m.direct_hosts.contains(t)))
+                .map(|t| {
+                    (
+                        vec![m.host(t).map(|h| h.display.clone()).unwrap_or_default()],
+                        m.direct_hosts.contains(t),
+                    )
+                })
                 .collect();
             st().c.dir_rows = vis;
             lv_fill(st().c.dir_list, &rows, true);
@@ -543,7 +664,12 @@ pub unsafe fn populate() {
             st().c.all_rows = rows.iter().map(|r| (r.target.clone(), r.session.clone())).collect();
             let mut data: Vec<(Vec<String>, bool)> = rows
                 .iter()
-                .map(|r| (vec![r.display.clone(), r.session.clone()], st().model.all_selected.contains(&(r.target.clone(), r.session.clone()))))
+                .map(|r| {
+                    (
+                        vec![r.display.clone(), r.session.clone()],
+                        st().model.all_selected.contains(&(r.target.clone(), r.session.clone())),
+                    )
+                })
                 .collect();
             if !any_connected {
                 data = vec![(vec![tr("Waiting for connections..."), String::new()], false)];
@@ -560,7 +686,11 @@ pub unsafe fn populate() {
 
 unsafe fn update_validation(h: &model::Host) {
     let p = parse_names(&h.new_text);
-    let mut msgs: Vec<String> = p.invalid.iter().map(|n| trf("Invalid name: '{name}'", &[("name", n)])).collect();
+    let mut msgs: Vec<String> = p
+        .invalid
+        .iter()
+        .map(|n| trf("Invalid name: '{name}'", &[("name", n)]))
+        .collect();
     for n in &p.valid {
         if h.sessions.contains(n) {
             msgs.push(trf("A session named '{name}' already exists.", &[("name", n)]));
@@ -574,17 +704,27 @@ unsafe fn update_validation(h: &model::Host) {
 unsafe fn update_direct_summary() {
     let m = &st().model;
     let p = parse_names(&m.direct_text);
-    let msgs: Vec<String> = p.invalid.iter().map(|n| trf("Invalid name: '{name}'", &[("name", n)])).collect();
+    let msgs: Vec<String> = p
+        .invalid
+        .iter()
+        .map(|n| trf("Invalid name: '{name}'", &[("name", n)]))
+        .collect();
     set_text(st().c.lbl_dir_validation, &msgs.join("\n"));
     let items = m.direct_items();
     let (ex, nw) = (tr("(existing)"), tr("(new)"));
-    let mut lines: Vec<String> = items.iter().map(|i| format!("  {} → {} {}", i.name, i.display, if i.exists { &ex } else { &nw })).collect();
+    let mut lines: Vec<String> = items
+        .iter()
+        .map(|i| format!("  {} → {} {}", i.name, i.display, if i.exists { &ex } else { &nw }))
+        .collect();
     if items.is_empty() {
         lines.push(tr("(no selection)"));
     } else {
         let hosts = m.hosts.iter().filter(|h| m.direct_hosts.contains(&h.target)).count();
         lines.push(String::new());
-        lines.push(trf("Total: {total} session(s) on {hosts} host(s)", &[("total", &items.len().to_string()), ("hosts", &hosts.to_string())]));
+        lines.push(trf(
+            "Total: {total} session(s) on {hosts} host(s)",
+            &[("total", &items.len().to_string()), ("hosts", &hosts.to_string())],
+        ));
     }
     set_text(st().c.ed_dir_summary, &crlf(&lines.join("\n")));
     set_btn(st().c.btn_dir_one, !items.is_empty());
@@ -594,12 +734,23 @@ unsafe fn update_direct_summary() {
 unsafe fn set_sort_arrows() {
     let hdr = HWND(send(st().c.all_list, LVM_GETHEADER, 0, 0) as *mut c_void);
     for col in 0..2 {
-        let mut item = HDITEMW { mask: HDI_FORMAT, ..Default::default() };
+        let mut item = HDITEMW {
+            mask: HDI_FORMAT,
+            ..Default::default()
+        };
         send(hdr, HDM_GETITEMW, col, &mut item as *mut _ as isize);
         let mut fmt = item.fmt.0 & !(HDF_SORTUP.0 | HDF_SORTDOWN.0);
-        let key = if col == 0 { model::SortKey::Host } else { model::SortKey::Session };
+        let key = if col == 0 {
+            model::SortKey::Host
+        } else {
+            model::SortKey::Session
+        };
         if st().model.all_sort == key {
-            fmt |= if st().model.all_asc { HDF_SORTUP.0 } else { HDF_SORTDOWN.0 };
+            fmt |= if st().model.all_asc {
+                HDF_SORTUP.0
+            } else {
+                HDF_SORTDOWN.0
+            };
         }
         item.fmt = HEADER_CONTROL_FORMAT_FLAGS(fmt);
         send(hdr, HDM_SETITEMW, col, &item as *const _ as isize);
@@ -618,11 +769,18 @@ fn split_key() -> Option<(String, Vec<i32>)> {
                 _ => return None,
             };
             let key = format!("host:{t}");
-            let v = stt.store.splits(&key).or_else(|| stt.store.splits("host:*")).unwrap_or_else(|| vec![560]);
+            let v = stt
+                .store
+                .splits(&key)
+                .or_else(|| stt.store.splits("host:*"))
+                .unwrap_or_else(|| vec![560]);
             Some((key, v))
         }
         View::Open => Some(("open".into(), st().store.splits("open").unwrap_or_else(|| vec![200]))),
-        View::Direct => Some(("direct".into(), st().store.splits("direct").unwrap_or_else(|| vec![380, 680]))),
+        View::Direct => Some((
+            "direct".into(),
+            st().store.splits("direct").unwrap_or_else(|| vec![380, 680]),
+        )),
         _ => None,
     }
 }
@@ -664,7 +822,13 @@ pub unsafe fn layout() {
     let c = &stt.c;
     move_to(c.host_filter, rect(m, top, m + lw, top + edit_h));
     move_to(c.host_list, rect(m, top + edit_h + s(4), m + lw, bottom));
-    stt.splitters.push(Splitter { rect: rect(m + lw, top, m + lw + gap, bottom), vertical: true, index: 0, min: s(120), max: rc.right - s(260) });
+    stt.splitters.push(Splitter {
+        rect: rect(m + lw, top, m + lw + gap, bottom),
+        vertical: true,
+        index: 0,
+        min: s(120),
+        max: rc.right - s(260),
+    });
     let dl = m + lw + gap;
     let dr = rc.right - m;
     let (dt, db) = (top, bottom);
@@ -679,17 +843,47 @@ pub unsafe fn layout() {
     };
     let split_y = |v: i32| dt + mul_div(db - dt, v, 1000);
     let add_split = |y: i32, idx: usize| {
-        st().splitters.push(Splitter { rect: rect(dl, y - gap / 2, dr, y + gap / 2 + 1), vertical: false, index: idx, min: dt, max: db });
+        st().splitters.push(Splitter {
+            rect: rect(dl, y - gap / 2, dr, y + gap / 2 + 1),
+            vertical: false,
+            index: idx,
+            min: dt,
+            max: db,
+        });
     };
     match stt.view {
         View::NewHost => {
             row(c.lbl_new, dt, lbl_h);
-            move_to(c.ed_new, rect(dl, dt + lbl_h + s(4), dl + (dr - dl).min(s(460)), dt + lbl_h + s(4) + edit_h));
-            move_to(c.btn_add, rect(dl, dt + lbl_h + edit_h + s(14), dl + (dr - dl).min(s(200)), dt + lbl_h + edit_h + s(14) + btn_h));
+            move_to(
+                c.ed_new,
+                rect(
+                    dl,
+                    dt + lbl_h + s(4),
+                    dl + (dr - dl).min(s(460)),
+                    dt + lbl_h + s(4) + edit_h,
+                ),
+            );
+            move_to(
+                c.btn_add,
+                rect(
+                    dl,
+                    dt + lbl_h + edit_h + s(14),
+                    dl + (dr - dl).min(s(200)),
+                    dt + lbl_h + edit_h + s(14) + btn_h,
+                ),
+            );
         }
         View::Pending => {
             row(c.lbl_info, dt, lbl_h * 3);
-            move_to(c.btn_del, rect(dl, dt + lbl_h * 3 + gap, dl + (dr - dl).min(s(200)), dt + lbl_h * 3 + gap + btn_h));
+            move_to(
+                c.btn_del,
+                rect(
+                    dl,
+                    dt + lbl_h * 3 + gap,
+                    dl + (dr - dl).min(s(200)),
+                    dt + lbl_h * 3 + gap + btn_h,
+                ),
+            );
         }
         View::Failed => {
             row(c.lbl_info, dt, lbl_h * 2);
@@ -727,7 +921,10 @@ pub unsafe fn layout() {
             let ty = sy + gap / 2 + s(2);
             row(c.lbl_summary, ty, lbl_h);
             let by = db - btn_h;
-            move_to(c.ed_summary, rect(dl, ty + lbl_h + s(2), dr, (by - gap).max(ty + lbl_h + lh)));
+            move_to(
+                c.ed_summary,
+                rect(dl, ty + lbl_h + s(2), dr, (by - gap).max(ty + lbl_h + lh)),
+            );
             buttons(&[c.btn_one, c.btn_per], by);
         }
         View::Direct => {
@@ -742,11 +939,17 @@ pub unsafe fn layout() {
             let ny = s1 + gap / 2 + s(2);
             row(c.lbl_names, ny, lbl_h);
             let val_h = lbl_h;
-            move_to(c.ed_names, rect(dl, ny + lbl_h + s(2), dr, (s2 - gap / 2 - val_h).max(ny + lbl_h + lh)));
+            move_to(
+                c.ed_names,
+                rect(dl, ny + lbl_h + s(2), dr, (s2 - gap / 2 - val_h).max(ny + lbl_h + lh)),
+            );
             move_to(c.lbl_dir_validation, rect(dl, s2 - gap / 2 - val_h, dr, s2 - gap / 2));
             add_split(s2, 2);
             let by = db - btn_h;
-            move_to(c.ed_dir_summary, rect(dl, s2 + gap / 2 + s(2), dr, (by - gap).max(s2 + lh)));
+            move_to(
+                c.ed_dir_summary,
+                rect(dl, s2 + gap / 2 + s(2), dr, (by - gap).max(s2 + lh)),
+            );
             buttons(&[c.btn_dir_one, c.btn_dir_per], by);
         }
         View::ShowAll => {
@@ -786,7 +989,11 @@ pub unsafe fn drag_splitter(i: usize, x: i32, y: i32, off: i32) {
 pub unsafe fn nudge_splitter(vk: VIRTUAL_KEY) {
     match vk {
         VK_LEFT | VK_RIGHT => {
-            let d = if (vk == VK_RIGHT) != crate::core::i18n::is_rtl() { 20 } else { -20 };
+            let d = if (vk == VK_RIGHT) != crate::core::i18n::is_rtl() {
+                20
+            } else {
+                -20
+            };
             st().left_w = (st().left_w + d).clamp(120, 2000);
         }
         _ => {
@@ -813,7 +1020,10 @@ pub unsafe fn save_splits() {
 }
 
 pub unsafe fn save_geometry() {
-    let mut wp = WINDOWPLACEMENT { length: size_of::<WINDOWPLACEMENT>() as u32, ..Default::default() };
+    let mut wp = WINDOWPLACEMENT {
+        length: size_of::<WINDOWPLACEMENT>() as u32,
+        ..Default::default()
+    };
     if GetWindowPlacement(st().main, &mut wp).is_err() {
         return;
     }
@@ -823,19 +1033,35 @@ pub unsafe fn save_geometry() {
     ini.set("Window", "Y", r.top.to_string());
     ini.set("Window", "W", (r.right - r.left).to_string());
     ini.set("Window", "H", (r.bottom - r.top).to_string());
-    ini.set("Window", "Maximized", if wp.showCmd == SW_SHOWMAXIMIZED.0 as u32 { "1" } else { "0" });
+    ini.set(
+        "Window",
+        "Maximized",
+        if wp.showCmd == SW_SHOWMAXIMIZED.0 as u32 {
+            "1"
+        } else {
+            "0"
+        },
+    );
     save_splits();
 }
 
 /// Restores position and size; returns whether the window was maximized.
 pub unsafe fn restore_geometry() -> bool {
     let ini = &st().store.ini;
-    let g = (ini.get_i32("Window", "X"), ini.get_i32("Window", "Y"), ini.get_i32("Window", "W"), ini.get_i32("Window", "H"));
+    let g = (
+        ini.get_i32("Window", "X"),
+        ini.get_i32("Window", "Y"),
+        ini.get_i32("Window", "W"),
+        ini.get_i32("Window", "H"),
+    );
     let maximized = ini.get("Window", "Maximized") == Some("1");
     if let (Some(x), Some(y), Some(w), Some(h)) = g {
         let r = rect(x, y, x + w, y + h);
         if w > 100 && h > 100 && !MonitorFromRect(&r, MONITOR_DEFAULTTONULL).is_invalid() {
-            let mut wp = WINDOWPLACEMENT { length: size_of::<WINDOWPLACEMENT>() as u32, ..Default::default() };
+            let mut wp = WINDOWPLACEMENT {
+                length: size_of::<WINDOWPLACEMENT>() as u32,
+                ..Default::default()
+            };
             wp.rcNormalPosition = r;
             wp.showCmd = SW_HIDE.0 as u32;
             let _ = SetWindowPlacement(st().main, &wp);
@@ -846,11 +1072,22 @@ pub unsafe fn restore_geometry() -> bool {
     let mut pt = POINT::default();
     let _ = GetCursorPos(&mut pt);
     let mon = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
-    let mut mi = MONITORINFO { cbSize: size_of::<MONITORINFO>() as u32, ..Default::default() };
+    let mut mi = MONITORINFO {
+        cbSize: size_of::<MONITORINFO>() as u32,
+        ..Default::default()
+    };
     let _ = GetMonitorInfoW(mon, &mut mi);
     let wa = mi.rcWork;
     let (w, h) = (s(1100).min(wa.right - wa.left), s(700).min(wa.bottom - wa.top));
-    let _ = SetWindowPos(st().main, None, wa.left + (wa.right - wa.left - w) / 2, wa.top + (wa.bottom - wa.top - h) / 2, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
+    let _ = SetWindowPos(
+        st().main,
+        None,
+        wa.left + (wa.right - wa.left - w) / 2,
+        wa.top + (wa.bottom - wa.top - h) / 2,
+        w,
+        h,
+        SWP_NOZORDER | SWP_NOACTIVATE,
+    );
     false
 }
 
@@ -885,7 +1122,11 @@ pub unsafe fn focus_filter() {
 }
 
 pub unsafe fn list_of_filter(h: HWND) -> Option<HWND> {
-    st().c.filters().iter().find(|(f, _)| *f == h && !h.is_invalid()).map(|(_, l)| *l)
+    st().c
+        .filters()
+        .iter()
+        .find(|(f, _)| *f == h && !h.is_invalid())
+        .map(|(_, l)| *l)
 }
 
 pub unsafe fn remember_focus() {
@@ -1118,7 +1359,11 @@ pub unsafe fn on_notify(lp: LPARAM) -> LRESULT {
         }
         LVN_COLUMNCLICK if id == ID_ALL_LIST => {
             let nm = &*(lp.0 as *const NMLISTVIEW);
-            perform(if nm.iSubItem == 0 { Action::SortHost } else { Action::SortSession });
+            perform(if nm.iSubItem == 0 {
+                Action::SortHost
+            } else {
+                Action::SortSession
+            });
         }
         NM_CUSTOMDRAW if id == ID_DIR_LIST => {
             let cd = &mut *(lp.0 as *mut NMLVCUSTOMDRAW);
@@ -1163,7 +1408,14 @@ pub unsafe fn on_ctl_color(m: u32, dc: HDC, h: HWND) -> LRESULT {
         let t = get_text(h);
         let invalid = tr("Invalid name: '{name}'");
         let prefix = invalid.split("{name}").next().unwrap_or("");
-        SetTextColor(dc, if !prefix.is_empty() && t.contains(prefix) { th.red } else { th.warn });
+        SetTextColor(
+            dc,
+            if !prefix.is_empty() && t.contains(prefix) {
+                th.red
+            } else {
+                th.warn
+            },
+        );
     }
     SetBkColor(dc, th.bg);
     LRESULT(st().br_bg.0 as isize)
@@ -1182,7 +1434,11 @@ pub unsafe fn on_draw_item(di: &DRAWITEMSTRUCT) {
         let focus = di.itemState.0 & ODS_FOCUS.0 != 0;
         fill(dc, &r, th.bg);
         let face = if down { th.button_down } else { th.button };
-        let pen = CreatePen(PS_SOLID, if focus { s(2) } else { 1 }, if focus { th.accent } else { th.line });
+        let pen = CreatePen(
+            PS_SOLID,
+            if focus { s(2) } else { 1 },
+            if focus { th.accent } else { th.line },
+        );
         let br = CreateSolidBrush(face);
         let op = SelectObject(dc, pen.into());
         let ob = SelectObject(dc, br.into());
@@ -1213,10 +1469,22 @@ pub unsafe fn on_draw_item(di: &DRAWITEMSTRUCT) {
         };
         let selected = di.itemState.0 & ODS_SELECTED.0 != 0;
         let focused_list = GetFocus() == st().c.host_list;
-        let bg = if selected && e != Entry::Sep { if focused_list { th.select } else { mix(th.panel, th.select, 0.6) } } else { th.panel };
+        let bg = if selected && e != Entry::Sep {
+            if focused_list {
+                th.select
+            } else {
+                mix(th.panel, th.select, 0.6)
+            }
+        } else {
+            th.panel
+        };
         fill(dc, &r, bg);
         if selected && e != Entry::Sep {
-            fill(dc, &rect(r.left, r.top + s(3), r.left + s(3), r.bottom - s(3)), th.accent);
+            fill(
+                dc,
+                &rect(r.left, r.top + s(3), r.left + s(3), r.bottom - s(3)),
+                th.accent,
+            );
         }
         let mut tr_ = r;
         tr_.left += s(10);
@@ -1233,7 +1501,11 @@ pub unsafe fn on_draw_item(di: &DRAWITEMSTRUCT) {
             }
             Entry::Host(t) => {
                 let texts = host_texts();
-                let txt = texts.iter().find(|(k, _)| k == t).map(|(_, v)| v.clone()).unwrap_or_else(|| t.clone());
+                let txt = texts
+                    .iter()
+                    .find(|(k, _)| k == t)
+                    .map(|(_, v)| v.clone())
+                    .unwrap_or_else(|| t.clone());
                 let status = st().model.host(t).map(|h| h.status);
                 draw_text(dc, &txt, tr_, status_color(status), fmt);
             }
@@ -1268,17 +1540,33 @@ pub unsafe fn paint(dc: HDC) {
     let ob = SelectObject(mem_dc, bmp.into());
     let mem = if rtl_layout { dc } else { mem_dc };
     fill(mem, &rc, th.bg);
-    let rtl = if i18n::is_rtl() { DT_RTLREADING } else { DRAW_TEXT_FORMAT(0) };
+    let rtl = if i18n::is_rtl() {
+        DT_RTLREADING
+    } else {
+        DRAW_TEXT_FORMAT(0)
+    };
     // Header
     let h = stt.rc_header;
     fill(mem, &h, th.panel);
     fill(mem, &rect(h.left, h.bottom - 1, h.right, h.bottom), th.line);
     let of = SelectObject(mem, stt.font_bold.into());
-    draw_text(mem, super::store::APP_NAME, rect(s(12), h.top, h.right - s(12), h.bottom), th.text, DT_LEFT | DT_VCENTER | DT_SINGLELINE | rtl);
+    draw_text(
+        mem,
+        super::store::APP_NAME,
+        rect(s(12), h.top, h.right - s(12), h.bottom),
+        th.text,
+        DT_LEFT | DT_VCENTER | DT_SINGLELINE | rtl,
+    );
     SelectObject(mem, stt.font.into());
     let code = i18n::language();
     let lang = format!("[{code}] {}", i18n::native_name(code));
-    draw_text(mem, &lang, rect(s(12), h.top, h.right - s(12), h.bottom), th.text_dim, DT_RIGHT | DT_VCENTER | DT_SINGLELINE | rtl);
+    draw_text(
+        mem,
+        &lang,
+        rect(s(12), h.top, h.right - s(12), h.bottom),
+        th.text_dim,
+        DT_RIGHT | DT_VCENTER | DT_SINGLELINE | rtl,
+    );
     // Splitter grips
     for sp in &stt.splitters {
         let r = sp.rect;
@@ -1312,9 +1600,21 @@ pub unsafe fn paint(dc: HDC) {
             fill(mem, &r, th.button_hot);
         }
         SelectObject(mem, stt.font_bold.into());
-        draw_text(mem, &key, rect(x, f.top, x + kw, f.bottom), th.accent, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | rtl);
+        draw_text(
+            mem,
+            &key,
+            rect(x, f.top, x + kw, f.bottom),
+            th.accent,
+            DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | rtl,
+        );
         SelectObject(mem, stt.font.into());
-        draw_text(mem, &name, rect(x + kw + s(5), f.top, x + w, f.bottom), th.text_dim, DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | rtl);
+        draw_text(
+            mem,
+            &name,
+            rect(x + kw + s(5), f.top, x + w, f.bottom),
+            th.text_dim,
+            DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX | rtl,
+        );
         stt.footer_rects.push((r, item));
         x += w + s(18);
     }
