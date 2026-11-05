@@ -11,6 +11,7 @@ src/main.rs          entry point; `core` everywhere, `ui` only on Windows
 src/core/            platform-independent logic, covered by `cargo test`
   model.rs           state of all views: hosts, selections, filters, summaries
   sshconfig.rs       host names from ~/.ssh/config (Include, patterns skipped)
+  knownhosts.rs      machines from known_hosts (grouped by server key)
   protocol.rs        remote scripts and line protocol; ssh -G parsing
   wt.rs              wt.exe command lines, batching (30 000 chars), set-up script
   display.rs         equal-width truncation of host names
@@ -52,11 +53,11 @@ Tabs are opened with `wt.exe new-tab --title "<session>@<host>" cmd.exe /c "ssh 
 
 | Section | Content |
 |---|---|
-| `Settings` | `HotkeyMods`, `HotkeyKey`, `BackgroundColor` (`#RRGGBB`), `Language` (`auto` or a code) |
+| `Settings` | `HotkeyMods`, `HotkeyKey`, `BackgroundColor` (`#RRGGBB`), `Language` (`auto` or a code), `DefaultUser`, `HiddenPreset` (git hosters hidden once) |
 | `Window` | `X`, `Y`, `W`, `H`, `Maximized`, `HostListWidth` (logical pixels) |
 | `Splits` | `host:<target>`, `open`, `direct`: splitter positions in per mille; `host:*` is the default for hosts without own values |
 | `Hosts` | hosts added in the app |
-| `Hidden` | hosts from the SSH config hidden by the user |
+| `Hidden` | hidden config aliases and known host names (preset: git hosting services) |
 | `Usage` | `<target>=<count>,<last use as Unix time>` |
 
 ## Translations

@@ -22,6 +22,8 @@ const ID_HOST_FILTER: i32 = 100;
 const ID_HOST_LIST: i32 = 101;
 const ID_ED_NEW: i32 = 110;
 const ID_BTN_ADD: i32 = 111;
+const ID_SUGG_FILTER: i32 = 112;
+const ID_SUGG_LIST: i32 = 113;
 const ID_BTN_DEL: i32 = 120;
 const ID_BTN_RECONNECT: i32 = 121;
 const ID_BTN_SETUP: i32 = 122;
@@ -54,6 +56,9 @@ pub struct Controls {
     pub lbl_new: HWND,
     pub ed_new: HWND,
     pub btn_add: HWND,
+    pub lbl_sugg: HWND,
+    pub sugg_filter: HWND,
+    pub sugg_list: HWND,
     // Pending / failed
     pub lbl_info: HWND,
     pub ed_error: HWND,
@@ -96,6 +101,7 @@ pub struct Controls {
     pub sess_rows: Vec<String>,
     pub dir_rows: Vec<String>,
     pub all_rows: Vec<(String, String)>,
+    pub sugg_rows: Vec<crate::core::model::Suggestion>,
 }
 
 impl Controls {
@@ -106,6 +112,9 @@ impl Controls {
             self.lbl_new,
             self.ed_new,
             self.btn_add,
+            self.lbl_sugg,
+            self.sugg_filter,
+            self.sugg_list,
             self.lbl_info,
             self.ed_error,
             self.btn_reconnect,
@@ -156,9 +165,10 @@ impl Controls {
             self.btn_all_per,
         ]
     }
-    fn filters(&self) -> [(HWND, HWND); 4] {
+    fn filters(&self) -> [(HWND, HWND); 5] {
         [
             (self.host_filter, self.host_list),
+            (self.sugg_filter, self.sugg_list),
             (self.sess_filter, self.sess_list),
             (self.dir_filter, self.dir_list),
             (self.all_filter, self.all_list),
@@ -257,6 +267,10 @@ pub unsafe fn create_controls() {
     let cue = wide(&tr("root@server or ssh-alias"));
     send(c.ed_new, EM_SETCUEBANNER, 1, cue.as_ptr() as isize);
     c.btn_add = mk_button(&tr("Add host"), ID_BTN_ADD);
+    c.lbl_sugg = mk_label(&tr("Known and hidden hosts:"));
+    c.sugg_filter = mk_filter(ID_SUGG_FILTER);
+    let lbs = WS_TABSTOP.0 | WS_VSCROLL.0 | (LBS_NOTIFY | LBS_NOINTEGRALHEIGHT) as u32;
+    c.sugg_list = mk(w!("LISTBOX"), "", lbs, WS_EX_CLIENTEDGE.0, ID_SUGG_LIST);
     // Pending / failed
     c.lbl_info = mk_label("");
     c.ed_error = mk_edit(ID_ED_ERROR, true, true);
@@ -424,7 +438,7 @@ unsafe fn on_host_sel_change() {
 unsafe fn view_controls(v: View) -> Vec<HWND> {
     let c = &st().c;
     match v {
-        View::NewHost => vec![c.lbl_new, c.ed_new, c.btn_add],
+        View::NewHost => vec![c.lbl_new, c.ed_new, c.btn_add, c.lbl_sugg, c.sugg_filter, c.sugg_list],
         View::Pending => vec![c.lbl_info, c.btn_del],
         View::Failed => vec![c.lbl_info, c.ed_error, c.btn_reconnect, c.btn_setup, c.btn_del],
         View::Connected => vec![
@@ -574,7 +588,37 @@ pub unsafe fn populate() {
         _ => None,
     };
     match st().view {
-        View::NewHost => {}
+        View::NewHost => {
+            let rows = st().model.suggestions();
+            set_text(st().c.sugg_filter, &st().model.suggest_filter.clone());
+            let lb = st().c.sugg_list;
+            let cur = send(lb, LB_GETCURSEL, 0, 0);
+            send(lb, WM_SETREDRAW, 0, 0);
+            send(lb, LB_RESETCONTENT, 0, 0);
+            let hidden = tr("(hidden)");
+            for s in &rows {
+                let mut label = s.name.clone();
+                if !s.aliases.is_empty() {
+                    label += &format!("  (= {})", s.aliases.join(", "));
+                }
+                if s.hidden {
+                    label += &format!("  {hidden}");
+                }
+                let w = wide(&label);
+                send(lb, LB_ADDSTRING, 0, w.as_ptr() as isize);
+            }
+            if !rows.is_empty() {
+                let i = if cur >= 0 && (cur as usize) < rows.len() {
+                    cur as usize
+                } else {
+                    0
+                };
+                send(lb, LB_SETCURSEL, i, 0);
+            }
+            send(lb, WM_SETREDRAW, 1, 0);
+            let _ = InvalidateRect(Some(lb), None, true);
+            st().c.sugg_rows = rows;
+        }
         View::Pending => {
             let t = c_host.unwrap_or_default();
             let d = st().model.host(&t).map(|h| h.display.clone()).unwrap_or_default();
@@ -872,6 +916,11 @@ pub unsafe fn layout() {
                     dt + lbl_h + edit_h + s(14) + btn_h,
                 ),
             );
+            let sy = dt + lbl_h + edit_h + btn_h + s(30);
+            row(c.lbl_sugg, sy, lbl_h);
+            row(c.sugg_filter, sy + lbl_h + s(2), edit_h);
+            let ly = sy + lbl_h + edit_h + s(6);
+            move_to(c.sugg_list, rect(dl, ly, dr, db.max(ly + lh)));
         }
         View::Pending => {
             row(c.lbl_info, dt, lbl_h * 3);
@@ -1114,6 +1163,7 @@ pub unsafe fn focus_filter() {
         View::Connected => c.sess_filter,
         View::Direct => c.dir_filter,
         View::ShowAll => c.all_filter,
+        View::NewHost => c.sugg_filter,
         _ => c.host_filter,
     };
     let f = if GetFocus() == c.host_list { c.host_filter } else { f };
@@ -1248,6 +1298,10 @@ pub unsafe fn on_command(id: i32, code: u32, _h: HWND) {
         }
         return;
     }
+    if id == ID_SUGG_LIST && code == LBN_DBLCLK {
+        take_suggestion();
+        return;
+    }
     if id == ID_HOST_LIST && code == LBN_SELCHANGE {
         on_host_sel_change();
         return;
@@ -1262,6 +1316,13 @@ pub unsafe fn on_command(id: i32, code: u32, _h: HWND) {
             ID_HOST_FILTER => {
                 st().model.host_filter = get_text(c.host_filter);
                 refresh_host_list();
+            }
+            ID_SUGG_FILTER => {
+                let f = get_text(c.sugg_filter);
+                if st().model.suggest_filter != f {
+                    st().model.suggest_filter = f;
+                    populate();
+                }
             }
             ID_SESS_FILTER => {
                 let f = get_text(c.sess_filter);
@@ -1625,4 +1686,24 @@ pub unsafe fn paint(dc: HDC) {
     SelectObject(mem_dc, ob);
     let _ = DeleteObject(bmp.into());
     let _ = DeleteDC(mem_dc);
+}
+
+/// Copies the highlighted suggestion into the "New host" input field; the
+/// cursor goes to the start so the user name can be changed (DEC-077).
+pub unsafe fn take_suggestion() {
+    let i = send(st().c.sugg_list, LB_GETCURSEL, 0, 0);
+    if i < 0 {
+        return;
+    }
+    let Some(s) = st().c.sugg_rows.get(i as usize).cloned() else {
+        return;
+    };
+    let ed = st().c.ed_new;
+    set_text(ed, &s.fill);
+    let _ = SetFocus(Some(ed));
+    send(ed, EM_SETSEL, 0, 0);
+}
+
+pub unsafe fn is_suggestion_list(h: HWND) -> bool {
+    !h.is_invalid() && h == st().c.sugg_list
 }

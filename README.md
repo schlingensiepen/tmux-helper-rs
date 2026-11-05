@@ -16,7 +16,7 @@ This is the native Windows variant, written in Rust on plain Win32: a single sma
 
 ## Features
 
-- **Hosts from your SSH config**: every `Host` entry of `%USERPROFILE%\.ssh\config` appears automatically; you can add more hosts by hand. Port, user and key come from the SSH config.
+- **Hosts found automatically**: every `Host` entry of `%USERPROFILE%\.ssh\config` and every host you have connected to before (`known_hosts`) appears in the list; *New host* offers the rest. Port, user and key come from the SSH config; for hosts from `known_hosts` a default user can be set.
 - **Status at a glance**: blue = connecting, green = sessions loaded, red = connection failed.
 - **Quick start**: Enter on *Open all detected sessions* opens every running session on every reachable host, one Windows Terminal window per host.
 - **Selection**: pick sessions per host, type names of new sessions, open everything in one window or one window per host.

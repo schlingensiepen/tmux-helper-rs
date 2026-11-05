@@ -396,3 +396,26 @@ msgstr "Sessions tmux sur des hôtes Linux distants comme onglets Windows Termin
 
 msgid "{app} is running"
 msgstr "{app} est en cours d'exécution"
+
+# Known hosts (DEC-077)
+
+msgid "Known hosts"
+msgstr "Hôtes connus"
+
+msgid "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it."
+msgstr "La liste ci-dessous propose les hôtes de votre fichier known_hosts qui ne sont pas encore dans la liste, ainsi que tous les hôtes masqués. Entrée ou double-clic en copie un dans le champ de saisie ; modifiez l'utilisateur si besoin et appuyez sur Entrée pour l'ajouter."
+
+msgid "Default user for known hosts:"
+msgstr "Utilisateur par défaut des hôtes connus :"
+
+msgid "empty = Windows user"
+msgstr "vide = utilisateur Windows"
+
+msgid "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\"."
+msgstr "Masquer l'hôte '{name}' ? Il reste dans votre fichier known_hosts ; vous pouvez le récupérer sous « Nouvel hôte »."
+
+msgid "Known and hidden hosts:"
+msgstr "Hôtes connus et masqués :"
+
+msgid "(hidden)"
+msgstr "(masqué)"

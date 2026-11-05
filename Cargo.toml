@@ -1,6 +1,6 @@
 [package]
 name = "open-tmux-tabs"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 description = "Open-TmuxTabs: tmux sessions on remote Linux hosts as Windows Terminal tabs (native Windows GUI)"
 license = "Apache-2.0"

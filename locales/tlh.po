@@ -401,3 +401,26 @@ msgstr "Hop Linux host Daq tmux session, Windows Terminal Qorwagh rur."
 
 msgid "{app} is running"
 msgstr "{app} Qap"
+
+# Known hosts (DEC-077)
+
+msgid "Known hosts"
+msgstr "host Sovlu'bogh"
+
+msgid "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it."
+msgstr "bIng tetlh known_hosts De'wI' vo' host tetlhDaq tu'lu'be'bogh 'ej Hoch host So'lu'bogh nob. Enter pagh cha'logh 'uy ghItlh Daq wa' lI'; ghot DachoHnISchugh choH 'ej Enter yIghoS."
+
+msgid "Default user for known hosts:"
+msgstr "host Sovlu'bogh ghot motlh:"
+
+msgid "empty = Windows user"
+msgstr "chIm = Windows ghot"
+
+msgid "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\"."
+msgstr "host '{name}' So'? known_hosts De'wI' Daq ratlh; \"host chu'\" Daq DaSuqlaH."
+
+msgid "Known and hidden hosts:"
+msgstr "host Sovlu'bogh 'ej So'lu'bogh:"
+
+msgid "(hidden)"
+msgstr "(So'lu')"

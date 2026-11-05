@@ -248,6 +248,7 @@ const IDS_COLORBTN: i32 = 3007;
 const IDS_AUTOSTART: i32 = 3008;
 const IDS_LANG_FILTER: i32 = 3009;
 const IDS_LANG_LIST: i32 = 3010;
+const IDS_USER: i32 = 3011;
 
 #[derive(Default)]
 struct Dlg {
@@ -372,6 +373,10 @@ unsafe fn apply_settings() {
             return;
         }
     }
+    ns.default_user = get_text(GetDlgItem(Some(d), IDS_USER).unwrap_or_default())
+        .trim()
+        .to_string();
+    let user_changed = ns.default_user != cur.default_user;
     let lang_changed = ns.language != cur.language;
     let bg_changed = ns.bg != cur.bg;
     st().set = ns;
@@ -388,6 +393,11 @@ unsafe fn apply_settings() {
     }
     if lang_changed {
         super::apply_language();
+    }
+    if user_changed {
+        let u = st().set.default_user.clone();
+        st().model.set_default_user(&u);
+        super::after_hosts_changed();
     }
     super::update_tray(windows::Win32::UI::Shell::NIM_MODIFY);
 }
@@ -506,7 +516,7 @@ pub unsafe fn show_settings(focus_language: bool) {
         } else {
             WINDOW_EX_STYLE(0)
         };
-    let (cw, ch) = (420, 470);
+    let (cw, ch) = (420, 496);
     let mut rc = rect(0, 0, sc(cw), sc(ch));
     let _ = windows::Win32::UI::HiDpi::AdjustWindowRectExForDpi(&mut rc, style, false, ex, dpi);
     let (ww, wh) = (rc.right - rc.left, rc.bottom - rc.top);
@@ -621,11 +631,35 @@ pub unsafe fn show_settings(focus_language: bool) {
         0,
     );
     mk(
+        w!("STATIC"),
+        &tr("Default user for known hosts:"),
+        SS_LEFT,
+        12,
+        368,
+        210,
+        20,
+        -1,
+        0,
+    );
+    let ue = mk(
+        w!("EDIT"),
+        "",
+        ES_AUTOHSCROLL as u32 | tab,
+        230,
+        364,
+        178,
+        24,
+        IDS_USER,
+        WS_EX_CLIENTEDGE.0,
+    );
+    let cue = wide(&tr("empty = Windows user"));
+    send(ue, EM_SETCUEBANNER, 1, cue.as_ptr() as isize);
+    mk(
         w!("BUTTON"),
         &tr("Start with Windows"),
         cb,
         12,
-        370,
+        406,
         396,
         20,
         IDS_AUTOSTART,
@@ -636,7 +670,7 @@ pub unsafe fn show_settings(focus_language: bool) {
         &tr("OK"),
         BS_DEFPUSHBUTTON as u32 | tab,
         232,
-        426,
+        452,
         84,
         28,
         IDOK.0,
@@ -647,7 +681,7 @@ pub unsafe fn show_settings(focus_language: bool) {
         &tr("Cancel"),
         BS_PUSHBUTTON as u32 | tab,
         324,
-        426,
+        452,
         84,
         28,
         IDCANCEL.0,
@@ -686,6 +720,7 @@ pub unsafe fn show_settings(focus_language: bool) {
     }
     set_swatch(set.bg);
     chk(IDS_AUTOSTART, store::get_autostart().is_some());
+    set_text(ue, &set.default_user);
     dlg().chosen = Some(set.language.as_deref().and_then(i18n::supported));
     fill_languages();
     enable(main, false);

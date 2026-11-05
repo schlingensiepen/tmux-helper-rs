@@ -401,3 +401,26 @@ msgstr "دور دراز Linux ہوسٹس پر tmux سیشنز، Windows Terminal
 
 msgid "{app} is running"
 msgstr "{app} چل رہا ہے"
+
+# Known hosts (DEC-077)
+
+msgid "Known hosts"
+msgstr "معلوم ہوسٹس"
+
+msgid "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it."
+msgstr "نیچے کی فہرست آپ کی known_hosts فائل سے وہ ہوسٹس پیش کرتی ہے جو ابھی فہرست میں نہیں ہیں، اور تمام چھپے ہوئے ہوسٹس۔ Enter یا ڈبل کلک ایک کو اندراج کے خانے میں نقل کرتا ہے؛ ضرورت ہو تو صارف بدلیں اور شامل کرنے کے لیے Enter دبائیں۔"
+
+msgid "Default user for known hosts:"
+msgstr "معلوم ہوسٹس کے لیے طے شدہ صارف:"
+
+msgid "empty = Windows user"
+msgstr "خالی = Windows صارف"
+
+msgid "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\"."
+msgstr "ہوسٹ '{name}' چھپائیں؟ یہ آپ کی known_hosts فائل میں رہتا ہے؛ آپ اسے \"نیا ہوسٹ\" میں واپس لا سکتے ہیں۔"
+
+msgid "Known and hidden hosts:"
+msgstr "معلوم اور چھپے ہوئے ہوسٹس:"
+
+msgid "(hidden)"
+msgstr "(چھپا ہوا)"

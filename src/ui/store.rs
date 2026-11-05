@@ -24,6 +24,8 @@ pub struct Settings {
     pub bg: COLORREF,
     /// `None` = follow the system language.
     pub language: Option<String>,
+    /// User for hosts from known_hosts; empty = the ssh default.
+    pub default_user: String,
 }
 
 impl Default for Settings {
@@ -33,6 +35,7 @@ impl Default for Settings {
             vk: 'T' as u32,
             bg: rgb(28, 30, 36),
             language: None,
+            default_user: String::new(),
         }
     }
 }
@@ -114,6 +117,7 @@ impl Store {
                 .get("Settings", "Language")
                 .filter(|l| *l != "auto" && !l.is_empty())
                 .map(String::from),
+            default_user: i.get("Settings", "DefaultUser").unwrap_or("").to_string(),
         };
         if let Some(c) = i.get("Settings", "BackgroundColor") {
             if c.len() == 7 && c.starts_with('#') {
@@ -143,6 +147,7 @@ impl Store {
             "Language",
             s.language.clone().unwrap_or_else(|| "auto".into()),
         );
+        i.set("Settings", "DefaultUser", s.default_user.trim());
     }
 
     pub fn manual_hosts(&self) -> Vec<String> {
@@ -153,13 +158,20 @@ impl Store {
             .filter(|v| !v.is_empty())
             .collect()
     }
+    /// Hidden hosts; on first use preset with the git hosters (DEC-077).
     pub fn hidden_hosts(&self) -> Vec<String> {
-        self.ini
-            .entries("Hidden")
-            .into_iter()
-            .map(|(_, v)| v)
-            .filter(|v| !v.is_empty())
-            .collect()
+        let mut v: Vec<String> = Vec::new();
+        if self.ini.get("Settings", "HiddenPreset").is_none() {
+            v.extend(crate::core::model::DEFAULT_HIDDEN.iter().map(|s| s.to_string()));
+        }
+        v.extend(
+            self.ini
+                .entries("Hidden")
+                .into_iter()
+                .map(|(_, v)| v)
+                .filter(|x| !x.is_empty()),
+        );
+        v
     }
 
     /// Applies stored usage counters to the model.
@@ -189,6 +201,7 @@ impl Store {
             .map(|(i, t)| ((i + 1).to_string(), t.clone()))
             .collect();
         self.ini.set_section("Hidden", hidden);
+        self.ini.set("Settings", "HiddenPreset", "1");
         let usage = m
             .hosts
             .iter()

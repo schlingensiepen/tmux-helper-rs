@@ -42,7 +42,13 @@ Alternatively download `OpenTmuxTabs.exe` from the releases page and run it from
 
 Host colors: **blue** = connecting, **green** = connected, the sessions are listed, **red** = connection failed.
 
-**Where the hosts come from.** Every `Host` entry of `%USERPROFILE%\.ssh\config` appears automatically (entries with wildcards such as `Host *` are skipped; `Include` files are read too). Port, user and key are taken from the SSH config. Hosts you add with *New host* are stored by the app. Deleting a host from the SSH config only hides it in the app; to show it again, add it with *New host*. **F5** reads the SSH config again.
+**Where the hosts come from.**
+
+- Every `Host` entry of `%USERPROFILE%\.ssh\config` (entries with wildcards such as `Host *` are skipped; `Include` files are read too). Port, user and key are taken from the SSH config.
+- Every host you have connected to before, from `%USERPROFILE%\.ssh\known_hosts` (and `known_hosts2`). They are connected as `<default user>@<name>`; set the default user in the settings (empty = your Windows user name, as with plain `ssh`). Names that belong to the same server (same server key) appear once. Hashed entries, IP-only entries and ports other than 22 are not added automatically. Git hosting services such as github.com are hidden from the start.
+- Hosts you add with *New host*; the app stores them.
+
+Deleting a host from the SSH config or from `known_hosts` only hides it in the app; the files are not changed. *New host* lists below the input field all known hosts that are not in the list and all hidden hosts: Enter or double-click copies one into the input field (the cursor is at the start, so you can change the user), Enter adds it. **F5** reads the SSH config and `known_hosts` again.
 
 **Footer.** The shortcuts of the current view. Point at one with the mouse for an explanation; click to run it; **F1** shows all explanations.
 
@@ -104,6 +110,7 @@ Open them with `l`, Ctrl+, or the tray menu.
 |---|---|---|
 | Language | *Automatic* follows the Windows display language (English if it is not supported); switching takes effect at once | Automatic |
 | Hotkey | Modifiers (Ctrl, Alt, Shift, Win) plus a key | Ctrl+Alt+T |
+| Default user for known hosts | User for hosts from `known_hosts`; empty = your Windows user | empty |
 | Background color | Base color; the light or dark theme follows from it | dark gray |
 | Start with Windows | Adds the app to your autostart | off |
 

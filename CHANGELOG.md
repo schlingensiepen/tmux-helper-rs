@@ -3,6 +3,13 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versioning: [SemVer](https://semver.org/).
 A draft release is created automatically when the `version` in `Cargo.toml` on `main` has no release yet; it is published by hand.
 
+## [1.0.1] – 2026-11-05
+
+### Added
+- Hosts from `known_hosts` (and `known_hosts2`) appear in the host list automatically, connected as the new setting *Default user for known hosts* (empty = your Windows user). Names that share a server key count as one machine; hashed entries, IP-only entries and ports other than 22 are skipped.
+- *New host* offers a filterable list of known hosts that are not in the list yet and of all hidden hosts. Enter or double-click copies one into the input field; hidden hosts come back this way.
+- Git hosting services (github.com, gitlab.com, bitbucket.org, Azure DevOps, codeberg.org) are hidden by default; they can be taken back from the list.
+
 ## [1.0.0] – 2026-11-04
 
 ### Added

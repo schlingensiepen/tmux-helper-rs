@@ -396,3 +396,26 @@ msgstr "Sesiones tmux en anfitriones Linux remotos como pestañas de Windows Ter
 
 msgid "{app} is running"
 msgstr "{app} está en ejecución"
+
+# Known hosts (DEC-077)
+
+msgid "Known hosts"
+msgstr "Anfitriones conocidos"
+
+msgid "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it."
+msgstr "La lista de abajo ofrece anfitriones de su archivo known_hosts que aún no están en la lista, y todos los anfitriones ocultos. Intro o doble clic copia uno al campo de entrada; cambie el usuario si hace falta y pulse Intro para añadirlo."
+
+msgid "Default user for known hosts:"
+msgstr "Usuario predeterminado para anfitriones conocidos:"
+
+msgid "empty = Windows user"
+msgstr "vacío = usuario de Windows"
+
+msgid "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\"."
+msgstr "¿Ocultar el anfitrión '{name}'? Permanece en su archivo known_hosts; puede recuperarlo en «Nuevo anfitrión»."
+
+msgid "Known and hidden hosts:"
+msgstr "Anfitriones conocidos y ocultos:"
+
+msgid "(hidden)"
+msgstr "(oculto)"

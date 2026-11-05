@@ -638,3 +638,26 @@ msgstr ""
 
 msgid "{app} is running"
 msgstr ""
+
+# Known hosts (DEC-077)
+
+msgid "Known hosts"
+msgstr ""
+
+msgid "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it."
+msgstr ""
+
+msgid "Default user for known hosts:"
+msgstr ""
+
+msgid "empty = Windows user"
+msgstr ""
+
+msgid "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\"."
+msgstr ""
+
+msgid "Known and hidden hosts:"
+msgstr ""
+
+msgid "(hidden)"
+msgstr ""

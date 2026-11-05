@@ -7,6 +7,7 @@
 pub mod display;
 pub mod i18n;
 pub mod ini;
+pub mod knownhosts;
 pub mod model;
 pub mod po;
 pub mod protocol;

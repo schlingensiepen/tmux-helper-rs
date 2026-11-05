@@ -396,3 +396,26 @@ msgstr "tmux-seancoj ĉe foraj Linux-gastigantoj kiel langetoj de Windows Termin
 
 msgid "{app} is running"
 msgstr "{app} funkcias"
+
+# Known hosts (DEC-077)
+
+msgid "Known hosts"
+msgstr "Konataj gastigantoj"
+
+msgid "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it."
+msgstr "La suba listo proponas gastigantojn el via dosiero known_hosts, kiuj ankoraŭ ne estas en la listo, kaj ĉiujn kaŝitajn gastigantojn. Enigo aŭ duobla klako kopias unu en la enigkampon; ŝanĝu la uzanton se necese kaj premu Enigon por aldoni ĝin."
+
+msgid "Default user for known hosts:"
+msgstr "Defaŭlta uzanto por konataj gastigantoj:"
+
+msgid "empty = Windows user"
+msgstr "malplena = Windows-uzanto"
+
+msgid "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\"."
+msgstr "Kaŝi gastiganton '{name}'? Ĝi restas en via dosiero known_hosts; vi reakiras ĝin sub „Nova gastiganto“."
+
+msgid "Known and hidden hosts:"
+msgstr "Konataj kaj kaŝitaj gastigantoj:"
+
+msgid "(hidden)"
+msgstr "(kaŝita)"

@@ -53,12 +53,20 @@ const INVERT: Item = it(
 pub fn items(view: View) -> Vec<Item> {
     let mut v: Vec<Item> = Vec::new();
     match view {
-        View::NewHost => v.push(it(
-            "Enter",
-            "Add host",
-            "Adds the typed SSH target to the list and connects to it in the background.",
-            Action::AddHost,
-        )),
+        View::NewHost => {
+            v.push(it(
+                "Enter",
+                "Add host",
+                "Adds the typed SSH target to the list and connects to it in the background.",
+                Action::AddHost,
+            ));
+            v.push(it(
+                "Tab",
+                "Known hosts",
+                "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it.",
+                Action::Filter,
+            ));
+        }
         View::Pending => v.push(DEL),
         View::Failed => {
             v.push(it(

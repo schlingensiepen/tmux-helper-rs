@@ -190,7 +190,8 @@ mod catalog_tests {
         let mut missing = vec![];
         for src in &files {
             for marker in ["tr(\"", "trf(\"", "it(\""] {
-                for (i, _) in src.match_indices(marker) {
+                let call = &marker[..marker.len() - 1];
+                for (i, _) in src.match_indices(call) {
                     if src[..i]
                         .chars()
                         .last()
@@ -198,7 +199,8 @@ mod catalog_tests {
                     {
                         continue;
                     }
-                    let rest = &src[i + marker.len()..];
+                    let after = src[i + call.len()..].trim_start();
+                    let Some(rest) = after.strip_prefix('"') else { continue };
                     // help items: it("key", "name", "help", ...) -> check name and help
                     let mut strings = vec![];
                     let mut cur = rest;

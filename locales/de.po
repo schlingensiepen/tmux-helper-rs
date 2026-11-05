@@ -516,3 +516,26 @@ msgstr "tmux-Sessions auf entfernten Linux-Hosts als Windows-Terminal-Tabs."
 
 msgid "{app} is running"
 msgstr "{app} läuft"
+
+# Known hosts (DEC-077)
+
+msgid "Known hosts"
+msgstr "Bekannte Hosts"
+
+msgid "The list below offers hosts from your known_hosts file that are not in the list yet, and all hidden hosts. Enter or double-click copies one into the input field; change the user if needed and press Enter to add it."
+msgstr "Die Liste darunter bietet Hosts aus Ihrer known_hosts-Datei an, die noch nicht in der Liste stehen, und alle ausgeblendeten Hosts. Enter oder Doppelklick übernimmt einen ins Eingabefeld; ändern Sie bei Bedarf den Benutzer und drücken Sie Enter, um ihn hinzuzufügen."
+
+msgid "Default user for known hosts:"
+msgstr "Standardbenutzer für bekannte Hosts:"
+
+msgid "empty = Windows user"
+msgstr "leer = Windows-Benutzer"
+
+msgid "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\"."
+msgstr "Host '{name}' ausblenden? Er bleibt in Ihrer known_hosts-Datei; Sie holen ihn unter „Neuer Host“ zurück."
+
+msgid "Known and hidden hosts:"
+msgstr "Bekannte und ausgeblendete Hosts:"
+
+msgid "(hidden)"
+msgstr "(ausgeblendet)"

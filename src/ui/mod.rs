@@ -12,6 +12,7 @@ mod views;
 mod worker;
 
 use crate::core::i18n::{self, tr, trf};
+use crate::core::knownhosts;
 use crate::core::model::{Model, SortKey, Source, Status};
 use crate::core::sshconfig;
 use crate::core::validate::parse_names;
@@ -144,6 +145,8 @@ pub struct State {
     pub msg_taskbar_created: u32,
     pub settings_wnd: HWND,
     pub last_sel_index: i32,
+    /// Hosts were loaded from the INI once; later reloads keep the model's lists.
+    pub hosts_loaded: bool,
 }
 
 static mut STATE: *mut State = null_mut();
@@ -284,21 +287,42 @@ unsafe fn load_config_hosts() -> Vec<String> {
 /// to all hosts.
 unsafe fn reload_hosts() {
     let config = load_config_hosts();
-    let manual = if st().model.hosts.is_empty() {
-        st().store.manual_hosts()
+    let home = std::env::var("USERPROFILE").unwrap_or_default();
+    let known = if home.is_empty() {
+        Vec::new()
     } else {
-        st().model.manual_targets()
+        knownhosts::read(std::path::Path::new(&home))
     };
-    let hidden = if st().model.hosts.is_empty() {
-        st().store.hidden_hosts()
+    let (manual, hidden) = if st().hosts_loaded {
+        (st().model.manual_targets(), st().model.hidden.clone())
     } else {
-        st().model.hidden.clone()
+        (st().store.manual_hosts(), st().store.hidden_hosts())
     };
-    st().model.load_hosts(&config, &manual, &hidden);
+    st().hosts_loaded = true;
+    let user = st().set.default_user.clone();
+    st().model.default_user = user.trim().to_string();
+    st().model.set_sources(&config, known, &manual, &hidden);
     let stt = st();
     stt.store.apply_usage(&mut stt.model);
     let targets: Vec<String> = st().model.hosts.iter().map(|h| h.target.clone()).collect();
     for t in &targets {
+        worker::resolve(t.clone());
+        start_connect(t);
+    }
+    after_hosts_changed();
+}
+
+/// After the host list changed: connect hosts that are new, keep the
+/// selection valid and redraw.
+pub unsafe fn after_hosts_changed() {
+    let fresh: Vec<String> = st()
+        .model
+        .hosts
+        .iter()
+        .filter(|h| h.generation == 0)
+        .map(|h| h.target.clone())
+        .collect();
+    for t in &fresh {
         worker::resolve(t.clone());
         start_connect(t);
     }
@@ -531,10 +555,9 @@ unsafe fn add_host() {
         return;
     }
     set_text(st().c.ed_new, "");
-    worker::resolve(target.clone());
-    start_connect(&target);
     save_store();
-    select(Entry::Host(target), false);
+    st().sel = Entry::Host(target);
+    after_hosts_changed();
 }
 
 unsafe fn delete_host() {
@@ -543,6 +566,11 @@ unsafe fn delete_host() {
     let q = if h.source == Source::Config {
         trf(
             "Hide host '{name}'? It stays in your SSH config file; add it again with \"New host\".",
+            &[("name", &h.display)],
+        )
+    } else if h.source == Source::Known {
+        trf(
+            "Hide host '{name}'? It stays in your known_hosts file; you can get it back under \"New host\".",
             &[("name", &h.display)],
         )
     } else {
@@ -717,6 +745,8 @@ unsafe fn pre_translate(msg: &MSG) -> bool {
                         views::focus_detail();
                     } else if let Some(list) = views::list_of_filter(focus) {
                         let _ = SetFocus(Some(list));
+                    } else if views::is_suggestion_list(focus) {
+                        views::take_suggestion();
                     } else if focus == st().c.ed_new {
                         perform(Action::AddHost);
                     } else if views::is_button(focus) {
@@ -1242,6 +1272,7 @@ unsafe fn run_inner() {
         msg_taskbar_created: 0,
         settings_wnd: HWND::default(),
         last_sel_index: -1,
+        hosts_loaded: false,
     });
     STATE = Box::into_raw(state);
     apply_language();
